@@ -817,14 +817,14 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   /* ---------- Neon 86: hero + ticker ---------- */
   let tickerPaused = false;
   function heroHTML() {
-    const items = latest(S.tips).filter((t) => !t.old).sort((a, b) => a.days - b.days).slice(0, 4).map((t) => "Juuri kierrossa: “" + t.title + "” – " + (t.mine ? "sinulta" : short(t.author.name)))
+    const items = latest(S.tips).filter((t) => !t.old).sort((a, b) => a.days - b.days).slice(0, 4).map((t) => "Uusi: “" + t.title + "” – " + (t.mine ? "sinulta" : short(t.author.name)))
       .concat(latest(S.tips).filter((t) => status(t) && status(t).k === "todettu").slice(0, 3).map((t) => "Todettu toimivaksi: “" + t.title + "”, " + stats(t).n + " kokeilua"));
     const run = items.map((x) => "<span>" + esc(x) + "</span>").join("");
     return '<section class="hero" aria-label="AI Puskaradio 25.5 FM">' +
       '<div class="hero-in"><span class="freq">25.5 FM</span><h2 class="logo"><span class="ai">AI</span>Puskaradio</h2>' +
       "<p>Löydä Veron kollegoiden tekoälyvinkit täältä. Älä istu ideasi päällä, vaan laita se kiertoon. Kokeile muiden vinkkejä, anna palautetta ja jalosta parhaat eteenpäin. Kaikesta saa pisteitä!</p>" +
       '<div class="row"><button class="btn btn-primary" type="button" id="heroShare">+ Jaa vinkki</button><a class="btn btn-ghost" href="#kysy">Kysy Puskaradiolta</a></div></div></section>' +
-      '<div class="ticker' + (tickerPaused ? " paused" : "") + '" role="marquee" aria-label="Nyt Puskaradiossa"><span class="lbl"><i aria-hidden="true"></i>NYT SOI</span><div class="track"><div class="run">' + run + '</div></div><button class="tick-btn" type="button" id="tickBtn" aria-pressed="' + tickerPaused + '">' + (tickerPaused ? "Jatka" : "Pysäytä") + "</button></div>";
+      '<div class="ticker' + (tickerPaused ? " paused" : "") + '" role="marquee" aria-label="Nyt Puskaradiossa"><span class="lbl"><i aria-hidden="true"></i>NYT KIERROSSA</span><div class="track"><div class="run">' + run + '</div></div><button class="tick-btn" type="button" id="tickBtn" aria-pressed="' + tickerPaused + '">' + (tickerPaused ? "Jatka" : "Pysäytä") + "</button></div>";
   }
 
   function sec(h, p, inner) { return '<section class="sec"><div class="sec-head"><h2>' + esc(h) + "</h2><p>" + esc(p) + "</p></div>" + inner + "</section>"; }
