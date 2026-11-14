@@ -45,5 +45,6 @@ Rookie → Tekijä → Velho → Mestari → Final boss
 ## Työtapa
 - **Committaa ja pushaa muutokset suoraan `main`-haaraan**, jotta ne näkyvät heti livenä.
 - Tämä on tarkoituksellinen poikkeus globaaleista säännöistä (hyväksyntä ennen committia ulkoasu-, teksti- ja live-muutoksille): **tämän projektin sääntö ohittaa ne, koska demo sisältää vain kuvitteellista sisältöä.**
+- **Ulkoasumuutokset tarkistetaan ennen pushia** skriptillä `node tools/browser-check.mjs` (työpöytä 1280 px ja mobiili 390 px, molemmat ilmeet) ja katsomalla kuvakaappaukset. Tehtäväkohtaiset tarkistukset tehdään saman skriptin `withPage`-apufunktiolla. Pushin jälkeen sama ajo live-osoitteeseen.
 - Muut globaalit säännöt pätevät edelleen: näytä koko tiedosto ennen muokkausta, tarkista toimivuus ennen kuin sanot valmiiksi, ja varmista pushin jälkeen, että Actions-ajo on vihreä ja live-sivu vastaa.
 - Commit-viestit englanniksi muodossa `type: what changed`.
