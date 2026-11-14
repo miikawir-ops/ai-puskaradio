@@ -40,7 +40,7 @@
   --mid-soft: #FFF2D2;
   --old: #5C6875;
   --old-soft: #ECEFF2;
-  --gold: #9B7618;
+  --gold: #7F600F;
   --gold-soft: #FBF3DC;
   --c-kirj: #156082;
   --c-tiiv: #6C45A8;
@@ -53,6 +53,12 @@
   --f-body: "Figtree", "Segoe UI", system-ui, sans-serif;
   --f-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
   --r: 12px;
+  /* Plain-skin tokens (neon overrides levels and badge fill in body.neon). */
+  --lv0: #0E7C86; --lv1: #1F7A3A; --lv2: #6C45A8; --lv3: #B8336F; --lv4: #8A6510;
+  --badge-fill: var(--surface);
+  --intro-bg: linear-gradient(120deg, #E3F0F8 0%, #F6EAF0 55%, #FCE6DC 100%);
+  --band: #E6EFF6;
+  --cat-mix: 14%;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -76,6 +82,10 @@
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25); --overlay: rgba(0,0,0,.6);
   color-scheme: dark;
 }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --intro-bg: linear-gradient(120deg, #163449 0%, #2A2440 55%, #3A2316 100%); --band: #10202D; --cat-mix: 24%; }
+}
+:root[data-theme="dark"] { --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --intro-bg: linear-gradient(120deg, #163449 0%, #2A2440 55%, #3A2316 100%); --band: #10202D; --cat-mix: 24%; }
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
@@ -115,8 +125,18 @@ nav.tabs a[aria-current="page"] { background: var(--accent-soft); color: var(--a
 .demo-strip .wrap { padding-block: 8px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
 .demo-strip button { background: none; border: 0; color: var(--accent); font-weight: 700; text-decoration: underline; padding: 0; font-size: 13px; }
 /* Plain-skin intro row on Vinkit (the neon hero carries the same actions). */
-.intro { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; margin-bottom: 18px; box-shadow: var(--shadow); }
-.intro p { margin: 0; font-weight: 600; max-width: 60ch; }
+.intro { display: flex; align-items: center; gap: 14px 24px; flex-wrap: wrap; background: var(--intro-bg); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; margin-bottom: 20px; box-shadow: var(--shadow); }
+.intro p { margin: 0; font-weight: 600; font-size: 17px; line-height: 1.45; flex: 1 1 320px; min-width: 0; text-wrap: balance; }
+@media (min-width: 641px) { .intro .row { flex: none; flex-wrap: nowrap; } }
+/* Plain skin: calm zones — tinted rail panels, a band behind the season's top tips, soft category tags. */
+body:not(.neon) .rail .panel { background: var(--accent-soft); border-color: transparent; box-shadow: inset 0 3px 0 var(--accent); }
+body:not(.neon) .rail .panel h2 { color: var(--accent); }
+body:not(.neon) .rail .seg { background: var(--surface); }
+body:not(.neon) .sec-top { background: var(--band); border-radius: 16px; padding: 16px; }
+body:not(.neon) .cat { background: color-mix(in srgb, var(--cc) var(--cat-mix), var(--surface)); color: var(--ink); padding: 2px 9px; border-radius: 999px; }
+body:not(.neon) .cat .dot { display: none; }
+body:not(.neon) .chip[aria-pressed="true"][style*="--cc"] { background: var(--cc); border-color: var(--cc); color: var(--surface); }
+body:not(.neon) .chip[aria-pressed="true"] .dot { display: none; }
 .m-only { display: none; }
 /* Compact top area on phones: one-line scrollable nav, short demo note, compact pill and share button. */
 @media (max-width: 640px) {
@@ -345,6 +365,7 @@ body.neon {
   --shadow: 0 6px 22px rgba(5,2,20,.55); --overlay: rgba(6,2,18,.72);
   --f-display: "Righteous", "Bricolage Grotesque", system-ui, sans-serif;
   --pink: #FF4FA3; --orange: #FF8A3D; --cyan: #2EE6F2;
+  --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --badge-fill: #1D1043;
   color-scheme: dark;
   background:
     radial-gradient(900px 520px at 85% -8%, rgba(255,79,163,.20), transparent 70%),
@@ -511,7 +532,6 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     { name: "Rookie", min: 0 }, { name: "Tekijä", min: 50 }, { name: "Velho", min: 150 },
     { name: "Mestari", min: 350 }, { name: "Final boss", min: 700 }
   ];
-  const LCOL = ["#2EE6F2", "#5CF2A0", "#B48CFF", "#FF4FA3", "#FFC857"];
   const LICON = [
     '<rect x="14" y="17" width="20" height="14" rx="2.5"/><circle cx="20" cy="24" r="2.6"/><circle cx="28" cy="24" r="2.6"/><path d="M18 31l2-3h8l2 3"/>',
     '<path d="M30.5 14.5a6 6 0 0 0-7.4 7.4L14.5 30.5a2.1 2.1 0 0 0 3 3l8.6-8.6a6 6 0 0 0 7.4-7.4l-3.6 3.6-3-.4-.4-3z"/>',
@@ -521,8 +541,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   ];
   function badge(i, size, decorative) {
     const n = LEVELS[i].name;
-    return '<svg class="badge" width="' + size + '" height="' + size + '" viewBox="0 0 48 48" style="color:' + LCOL[i] + '"' + (decorative ? ' aria-hidden="true"' : ' role="img" aria-label="Taso: ' + n + '"') + '>' +
-      '<path d="M24 3.5l17.8 10.3v20.4L24 44.5 6.2 34.2V13.8z" fill="#1D1043" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>' +
+    return '<svg class="badge" width="' + size + '" height="' + size + '" viewBox="0 0 48 48" style="color:var(--lv' + i + ')"' + (decorative ? ' aria-hidden="true"' : ' role="img" aria-label="Taso: ' + n + '"') + '>' +
+      '<path d="M24 3.5l17.8 10.3v20.4L24 44.5 6.2 34.2V13.8z" style="fill:var(--badge-fill)" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>' +
       (i === 4 ? '<path d="M24 8l13.9 8v16L24 40 10.1 32V16z" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>' : "") +
       '<g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">' + LICON[i] + "</g></svg>";
   }
@@ -770,7 +790,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     let b = ""; for (let i = 1; i <= 4; i++) b += '<i class="' + (i <= lv ? "on" : "") + '"></i>';
     return '<span class="signal"><span class="bars" aria-hidden="true">' + b + "</span>" + (n === 0 ? "Ei vielä kokeiltu" : n + (n === 1 ? " kokeilu" : " kokeilua")) + "</span>";
   }
-  function catTag(t) { const c = CATS[t.cat]; return '<span class="cat"><span class="dot" style="background:' + c.c + '"></span>' + esc(c.name) + "</span>"; }
+  function catTag(t) { const c = CATS[t.cat]; return '<span class="cat" style="--cc:' + c.c + '"><span class="dot" style="background:' + c.c + '"></span>' + esc(c.name) + "</span>"; }
 
   function card(t, extra) {
     const d = depth(t); const cls = ["card"]; if (extra === "classic") cls.push("classic"); if (t.old) cls.push("old");
@@ -825,7 +845,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const all = latest(S.tips);
     const filtered = all.filter((t) => (filterCat === "all" || t.cat === filterCat) && (!query || matchScore(t, tokens(query)) > 0));
     const chips = '<button class="chip" type="button" data-cat="all" aria-pressed="' + (filterCat === "all") + '">Kaikki</button>' +
-      Object.keys(CATS).map((k) => '<button class="chip" type="button" data-cat="' + k + '" aria-pressed="' + (filterCat === k) + '"><span class="dot" style="background:' + CATS[k].c + '"></span>' + CATS[k].name + "</button>").join("");
+      Object.keys(CATS).map((k) => '<button class="chip" type="button" data-cat="' + k + '" style="--cc:' + CATS[k].c + '" aria-pressed="' + (filterCat === k) + '"><span class="dot" style="background:' + CATS[k].c + '"></span>' + CATS[k].name + "</button>").join("");
     let body = "";
     if (filterCat !== "all" || query) {
       const list = filtered.sort((a, b) => score(b) - score(a));
@@ -838,7 +858,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       const classics = live.filter((t) => !top.includes(t) && status(t) && status(t).k === "todettu").sort((a, b) => stats(b).u - stats(a).u).slice(0, 3);
       const used = new Set([...top, ...fresh, ...first, ...classics].map((t) => t.id));
       const rest = all.filter((t) => !used.has(t.id)).sort((a, b) => score(b) - score(a));
-      body = sec("Kauden kärki", "Kuun aikana eniten hyötyä tuottaneet vinkit.", '<div class="grid">' + top.map((t) => card(t)).join("") + "</div>") +
+      body = sec("Kauden kärki", "Kuun aikana eniten hyötyä tuottaneet vinkit.", '<div class="grid">' + top.map((t) => card(t)).join("") + "</div>", "sec-top") +
         (first.length ? sec("Kuka kokeilee ensin?", "Ensimmäinen kokeilija saa +3 lisäpistettä.", '<div class="grid">' + first.map((t) => card(t, "first")).join("") + "</div>") : "") +
         (fresh.length ? sec("Juuri jaettu", "Viimeisen viikon aikana kiertoon laitetut.", '<div class="grid">' + fresh.map((t) => card(t)).join("") + "</div>") : "") +
         sec("Puskaradion klassikot", "Kaikkien aikojen eniten toimineet vinkit.", '<div class="grid">' + classics.map((t) => card(t, "classic")).join("") + "</div>") +
@@ -871,7 +891,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<div class="ticker' + (tickerPaused ? " paused" : "") + '" role="marquee" aria-label="Nyt Puskaradiossa"><span class="lbl"><i aria-hidden="true"></i>NYT KIERROSSA</span><div class="track"><div class="run">' + run + '</div></div><button class="tick-btn" type="button" id="tickBtn" aria-pressed="' + tickerPaused + '">' + (tickerPaused ? "Jatka" : "Pysäytä") + "</button></div>";
   }
 
-  function sec(h, p, inner) { return '<section class="sec"><div class="sec-head"><h2>' + esc(h) + "</h2><p>" + esc(p) + "</p></div>" + inner + "</section>"; }
+  function sec(h, p, inner, cls) { return '<section class="sec' + (cls ? " " + cls : "") + '"><div class="sec-head"><h2>' + esc(h) + "</h2><p>" + esc(p) + "</p></div>" + inner + "</section>"; }
 
   const PART = { "Yksikkö 3": 62, "Yksikkö 2": 71, "Yksikkö 1": 78, "Yksikkö 6": 54, "Yksikkö 4": 66, "Yksikkö 5": 83, "Oma yksikkö": 69 };
   function unitBoard() {
@@ -922,7 +942,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   }
   function viewLeaders() {
     const ppl = peopleRows(), tms = teamRows(), uns = unitRows();
-    const lead = (rows, label, unit) => { const r = rows[0]; return '<div class="podium">' + (r.lv != null ? badge(r.lv, 44, false) : '<svg class="badge" width="44" height="44" viewBox="0 0 48 48" aria-hidden="true" style="color:#FFC857"><path d="M13 31l1.8-13 5.4 6.5L24 14l3.8 10.5 5.4-6.5L35 31z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>') + "<div><small>" + label + "</small><b>" + esc(r.label) + "</b><small>" + r.v + " " + unit + "</small></div></div>"; };
+    const lead = (rows, label, unit) => { const r = rows[0]; return '<div class="podium">' + (r.lv != null ? badge(r.lv, 44, false) : '<svg class="badge" width="44" height="44" viewBox="0 0 48 48" aria-hidden="true" style="color:var(--lv4)"><path d="M13 31l1.8-13 5.4 6.5L24 14l3.8 10.5 5.4-6.5L35 31z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>') + "<div><small>" + label + "</small><b>" + esc(r.label) + "</b><small>" + r.v + " " + unit + "</small></div></div>"; };
     const top = latest(S.tips).filter((t) => !t.old && t.s > 0).sort((a, b) => seasonScore(b) - seasonScore(a)).slice(0, 5);
     const brave = S.brave.concat([{ name: "Sinä", n: S.me.trials, me: true }]).sort((a, b) => b.n - a.n).slice(0, 5);
     return '<div class="view-head"><div><span class="eyebrow">' + esc(seasonInfo().name) + " · " + seasonInfo().left + ' päivää jäljellä</span><h1>Tulostaulu</h1><p>Kilpailu kolmella tasolla. Kausi nollautuu kuun vaihteessa, mutta tasot ja kausimerkit säilyvät. Listoilla näkyy kärki ja oma sijoituksesi. Tiimit kilpailevat jäsentä kohden lasketuilla pisteillä, joten pienikin tiimi voi voittaa.</p></div></div>' +
