@@ -350,6 +350,15 @@ body.neon .big { font-family: "Righteous", sans-serif; font-weight: 400; color: 
 body.neon .msg.user { background: linear-gradient(90deg, var(--pink), #D0479A); color: #1A0620; }
 body.neon .check-corner { background: #22124D; }
 body.neon .drawer { background: #140A2E; }
+/* Neon side rail: lifted on lighter violet-pink panels with a thin neon gradient frame (lighter, never darker). */
+body.neon .rail .panel {
+  --ink-2: #E6DAFA; --line: rgba(255,255,255,.22); --surface-2: rgba(255,255,255,.12);
+  background: linear-gradient(160deg, #4A2C82, #5A2F7A) padding-box, linear-gradient(135deg, var(--pink), var(--orange), var(--cyan)) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 0 18px rgba(255,79,163,.22), 0 0 30px rgba(46,230,242,.10);
+}
+body.neon .rail .panel h2 { color: var(--gold); }
+body.neon .rail .rank li.me { background: rgba(255,79,163,.24); box-shadow: inset 0 0 0 1px rgba(255,79,163,.65); }
 
 /* hero (neon only) */
 .hero { display: none; }
