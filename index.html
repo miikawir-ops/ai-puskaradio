@@ -115,6 +115,9 @@ nav.tabs a[aria-current="page"] { background: var(--accent-soft); color: var(--a
 .demo-strip { background: var(--accent-soft); color: var(--ink); font-size: 13px; }
 .demo-strip .wrap { padding-block: 8px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
 .demo-strip button { background: none; border: 0; color: var(--accent); font-weight: 700; text-decoration: underline; padding: 0; font-size: 13px; }
+/* Plain-skin intro row on Vinkit (the neon hero carries the same actions). */
+.intro { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; margin-bottom: 18px; box-shadow: var(--shadow); }
+.intro p { margin: 0; font-weight: 600; max-width: 60ch; }
 
 main { padding-block: 24px 64px; }
 .view-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
@@ -823,10 +826,18 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
         sec("Kaikki muut vinkit", "Hyödyllisiksi koetut nousevat ensin.", '<div class="grid">' + rest.map((t) => card(t)).join("") + "</div>");
     }
     const si = seasonInfo();
-    return heroHTML() + '<div class="view-head"><div><span class="eyebrow">' + esc(si.name) + " · " + si.left + " päivää jäljellä" + (skin === "neon" ? " · Kauden teema: Neon 86" : "") + '</span><h1>Kierrossa olevat vinkit</h1></div></div>' +
+    return (skin === "neon" ? heroHTML() : introHTML()) + '<div class="view-head"><div><span class="eyebrow">' + esc(si.name) + " · " + si.left + " päivää jäljellä" + (skin === "neon" ? " · Kauden teema: Neon 86" : "") + '</span><h1>Kierrossa olevat vinkit</h1></div></div>' +
       '<div class="board"><div>' +
       '<div class="filters"><label class="search"><span class="sr">Hae vinkkejä</span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Hae vinkkejä, esim. muistio tai Excel" value="' + esc(query) + '"></label>' + chips + "</div>" +
       body + "</div>" + rail() + "</div>";
+  }
+  /* ---------- Vinkit page actions: hero (neon) or intro row (plain), one button builder ---------- */
+  function boardActions() {
+    return '<div class="row">' + (heroTryTip() ? '<button class="btn btn-blue" type="button" id="heroTry">Kokeile vinkkiä</button>' : "") +
+      '<button class="btn btn-primary" type="button" id="heroShare">+ Jaa vinkki</button><a class="btn btn-ghost" href="#kysy">Kysy Puskaradiolta</a></div>';
+  }
+  function introHTML() {
+    return '<section class="intro" aria-label="AI Puskaradio"><p>Löydä Veron kollegoiden tekoälyvinkit täältä. Kokeile, jaa ja kehitä – kaikesta saa pisteitä.</p>' + boardActions() + "</section>";
   }
   /* ---------- Neon 86: hero + ticker ---------- */
   let tickerPaused = false;
@@ -837,7 +848,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     return '<section class="hero" aria-label="AI Puskaradio 25.5 FM">' +
       '<div class="hero-in"><span class="freq">25.5 FM</span><h2 class="logo"><span class="ai">AI</span>Puskaradio</h2>' +
       "<p>Löydä Veron kollegoiden tekoälyvinkit täältä. Älä istu ideasi päällä, vaan laita se kiertoon. Kokeile muiden vinkkejä, anna palautetta ja jalosta parhaat eteenpäin. Kaikesta saa pisteitä!</p>" +
-      '<div class="row">' + (heroTryTip() ? '<button class="btn btn-blue" type="button" id="heroTry">Kokeile vinkkiä</button>' : "") + '<button class="btn btn-primary" type="button" id="heroShare">+ Jaa vinkki</button><a class="btn btn-ghost" href="#kysy">Kysy Puskaradiolta</a></div></div></section>' +
+      boardActions() + "</div></section>" +
       '<div class="ticker' + (tickerPaused ? " paused" : "") + '" role="marquee" aria-label="Nyt Puskaradiossa"><span class="lbl"><i aria-hidden="true"></i>NYT KIERROSSA</span><div class="track"><div class="run">' + run + '</div></div><button class="tick-btn" type="button" id="tickBtn" aria-pressed="' + tickerPaused + '">' + (tickerPaused ? "Jatka" : "Pysäytä") + "</button></div>";
   }
 
