@@ -13,8 +13,9 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 - Repo on julkinen: kaikki mitä committaat, on heti julkista.
 
 ## Tekninen rakenne
-- **Yksi itsenäinen `index.html`**: CSS, JS ja kuvat upotettuina (kuvat base64-data-URI:na). Ei build-vaihetta, ei riippuvuuksia, ei npm:ää.
-- Ainoa ulkoinen lataus on Google Fonts -tyylitiedosto; jokaisella fontilla on järjestelmäfontti varalla, joten sivu toimii ilman sitä.
+- **Sivusto = `index.html` + `fonts/`.** `index.html` sisältää CSS:n, JS:n ja kuvat upotettuina (kuvat base64-data-URI:na). Ei build-vaihetta, ei riippuvuuksia, ei npm:ää.
+- **Ei ulkoisia latauksia** (ei CDN:iä, ei Google Fontsia, ei analytiikkaa). Fontit isännöidään itse kansiossa `fonts/` (woff2, osajoukot latin + latin-ext, `@font-face` index.html:n `<style>`-osiossa). Lisenssit: `fonts/LICENSES.md` ja `fonts/licenses/`. Uuden fontin saa lisätä vain, jos sen lisenssi sallii uudelleenjakelun ja lisenssiteksti lisätään samalla.
+- Workflow julkaisee vain `index.html`:n ja `fonts/`-kansion; muut repon tiedostot (CLAUDE.md, README) eivät näy sivustolla.
 - **Käyttöliittymä suomeksi.**
 - **Tila vain katsojan selaimessa**: `localStorage`, jokainen luku ja kirjoitus `try/catch`-suojattuna. Sivun pitää toimia myös, kun tallennus on estetty. Ei palvelinta, ei analytiikkaa, ei evästeitä.
 - Tallennusavain `ai-puskaradio-demo-v1`. Jos tallennetun tilan rakenne muuttuu yhteensopimattomasti, nosta versionumeroa.
