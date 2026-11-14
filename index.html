@@ -150,6 +150,8 @@ main { padding-block: 24px 64px; }
 /* Card action row sits above the whole-card click area of .card-link::after. */
 .card-act { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; }
 .tried { font-size: 12.5px; font-weight: 700; color: var(--ok); }
+.card-tags { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.bonus { font-size: 11.5px; font-weight: 800; color: var(--signal); border: 1.5px solid var(--signal); padding: 1px 7px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 #rateForm { scroll-margin-top: 76px; }
 .card-link:focus-visible::after { outline: 3px solid var(--accent); outline-offset: 2px; }
 .card .hyoty { margin: 0; font-size: 14px; color: var(--ink-2); flex: 1; }
@@ -343,6 +345,7 @@ body.neon .card { background: rgba(29,16,67,.93); }
 body.neon .view-head, body.neon .sec-head, body.neon .why b { text-shadow: 0 1px 2px rgba(10,4,26,.95), 0 0 14px rgba(10,4,26,.85); }
 body.neon .view-head p, body.neon .sec-head p, body.neon .view-head .eyebrow { color: #E4D8FA; }
 body.neon .panel { background: rgba(29,16,67,.93); }
+body.neon .bonus { box-shadow: 0 0 8px rgba(255,79,163,.45); }
 body.neon .card:hover { border-color: var(--pink); box-shadow: 0 0 0 1px var(--pink), 0 0 22px rgba(255,79,163,.35); }
 body.neon .card.classic { background: rgba(29,16,67,.88); border-color: var(--gold); box-shadow: 0 0 16px rgba(255,200,87,.25); }
 body.neon .bars i.on { background: var(--cyan); box-shadow: 0 0 6px rgba(46,230,242,.8); }
@@ -753,7 +756,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function card(t, extra) {
     const d = depth(t); const cls = ["card"]; if (extra === "classic") cls.push("classic"); if (t.old) cls.push("old");
     return '<article class="' + cls.join(" ") + '">' +
-      '<div class="card-top">' + catTag(t) + (d > 1 ? '<span class="vbadge">Parannettu · v' + d + "</span>" : "") + "</div>" +
+      '<div class="card-top">' + catTag(t) + '<span class="card-tags">' + (d > 1 ? '<span class="vbadge">Parannettu · v' + d + "</span>" : "") +
+        (extra === "first" ? '<span class="bonus" role="img" aria-label="Ensimmäinen kokeilija saa 3 lisäpistettä">+3 p</span>' : "") + "</span></div>" +
       '<h3><button class="card-link" type="button" data-open="' + t.id + '">' + esc(t.title) + "</button></h3>" +
       '<p class="hyoty">' + esc(t.hyoty) + "</p>" +
       '<div class="card-foot">' + (statusChip(t) || "<span></span>") + signal(t) + "</div>" +
@@ -809,7 +813,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       const used = new Set([...top, ...fresh, ...first, ...classics].map((t) => t.id));
       const rest = all.filter((t) => !used.has(t.id)).sort((a, b) => score(b) - score(a));
       body = sec("Kauden kärki", "Kuun aikana eniten hyötyä tuottaneet vinkit.", '<div class="grid">' + top.map((t) => card(t)).join("") + "</div>") +
-        (first.length ? sec("Kuka kokeilee ensin?", "Ensimmäinen kokeilija saa +3 lisäpistettä.", '<div class="grid">' + first.map((t) => card(t)).join("") + "</div>") : "") +
+        (first.length ? sec("Kuka kokeilee ensin?", "Ensimmäinen kokeilija saa +3 lisäpistettä.", '<div class="grid">' + first.map((t) => card(t, "first")).join("") + "</div>") : "") +
         (fresh.length ? sec("Juuri jaettu", "Viimeisen viikon aikana kiertoon laitetut.", '<div class="grid">' + fresh.map((t) => card(t)).join("") + "</div>") : "") +
         sec("Puskaradion klassikot", "Kaikkien aikojen eniten toimineet vinkit.", '<div class="grid">' + classics.map((t) => card(t, "classic")).join("") + "</div>") +
         sec("Kaikki muut vinkit", "Hyödyllisiksi koetut nousevat ensin.", '<div class="grid">' + rest.map((t) => card(t)).join("") + "</div>");
