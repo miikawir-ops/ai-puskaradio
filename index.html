@@ -714,10 +714,10 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function status(t) {
     if (t.old) return { k: "vanha", label: "Vanhentunut" };
     const s = stats(t);
-    if (s.n < 5) return { k: "kokeile", label: "Kokeile" };
+    if (s.n < 5) return { k: "kokeile", label: "Kokeilussa" };
     if (s.pct >= 70) return { k: "todettu", label: "Todettu toimivaksi" };
     if (s.pct >= 45) return { k: "tietyissa", label: "Toimii tietyissä tilanteissa" };
-    return { k: "kokeile", label: "Kokeile" }; // weak tips keep the neutral label and just sink in the order
+    return { k: "kokeile", label: "Kokeilussa" }; // weak tips keep the neutral label and just sink in the order
   }
   function isWeak(t) { const s = stats(t); return !t.old && s.n >= 5 && s.pct < 45; }
   function spread(t) { const n = stats(t).n; return n ? Math.min(9, Math.max(1, Math.round(Math.sqrt(n) * 1.3))) : 0; }
@@ -1010,7 +1010,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<div class="two"><section class="panel"><h2>Pisteet</h2><p class="sub">Pisteet tulevat siitä, että muut hyötyvät. Pisteitä ei voi menettää.</p><div class="tbl-wrap"><table><thead><tr><th>Teko</th><th>Kenelle</th><th>Pisteet</th></tr></thead><tbody>' +
       rows.map((r) => "<tr><td>" + esc(r[0]) + (r[3] ? '<br><small class="muted">' + esc(r[3]) + "</small>" : "") + "</td><td>" + esc(r[1]) + '</td><td class="num">' + esc(r[2]) + "</td></tr>").join("") + "</tbody></table></div></section>" +
       '<div class="rail"><section class="panel"><h2>Vinkin statukset</h2><p class="sub">Heikosti toimiva vinkki ei saa merkintää. Se vain jää vähitellen taka-alalle.</p><ul class="notes">' +
-      '<li><span class="status st-kokeile">' + ICON.try + 'Kokeile</span><small>Uusi tai vielä vakiintumaton vinkki</small></li>' +
+      '<li><span class="status st-kokeile">' + ICON.try + 'Kokeilussa</span><small>Uusi tai vielä vakiintumaton vinkki</small></li>' +
       '<li><span class="status st-todettu">' + ICON.ok + 'Todettu toimivaksi</span><small>Vähintään 5 kokeilua ja vähintään 70 % hyödyllisiä</small></li>' +
       '<li><span class="status st-tietyissa">' + ICON.half + 'Toimii tietyissä tilanteissa</span><small>Vähintään 5 kokeilua, arviot hajallaan</small></li>' +
       '<li><span class="status st-vanha">' + ICON.clock + 'Vanhentunut</span><small>Työkalu on muuttunut. Ei koskaan heikkojen arvioiden perusteella.</small></li></ul></section>' +
