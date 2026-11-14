@@ -792,7 +792,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function seasonInfo() {
     const now = new Date(); const months = ["Tammikuun", "Helmikuun", "Maaliskuun", "Huhtikuun", "Toukokuun", "Kesäkuun", "Heinäkuun", "Elokuun", "Syyskuun", "Lokakuun", "Marraskuun", "Joulukuun"];
     const end = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    return { name: months[now.getMonth()] + " kausi", left: end - now.getDate() };
+    const m = months[now.getMonth()];
+    return { name: m + " kausi", gen: m.toLowerCase(), left: end - now.getDate() };
   }
 
   function viewBoard() {
@@ -887,7 +888,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function leaderMini() {
     const rows = lbTab === "p" ? peopleRows() : lbTab === "t" ? teamRows() : unitRows();
     const btn = (k, l) => '<button type="button" data-lb="' + k + '" aria-pressed="' + (lbTab === k) + '">' + l + "</button>";
-    return '<section class="panel"><h2>Kauden tulostaulu</h2><p class="sub">Kuka johtaa ' + esc(seasonInfo().name.toLowerCase()) + "a? Kausi nollautuu kuun vaihteessa.</p>" +
+    return '<section class="panel"><h2>Kauden tulostaulu</h2><p class="sub">Kuka johtaa ' + esc(seasonInfo().gen) + " kautta? Kausi nollautuu kuun vaihteessa.</p>" +
       '<div class="seg" role="group" aria-label="Valitse taso">' + btn("p", "Yksilöt") + btn("t", "Tiimit") + btn("u", "Yksiköt") + "</div>" +
       lbList(rows, 3, UNITW[lbTab]) + '<a class="more-link" href="#tulostaulu">Koko tulostaulu →</a></section>';
   }
