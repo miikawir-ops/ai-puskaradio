@@ -8,8 +8,9 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 - Julkaistaan GitHub Pagesissa (julkinen repo, GitHub Actions -workflow `.github/workflows/pages.yml`, julkaisee `index.html`:n ja `fonts/`-kansion jokaisella pushilla `main`-haaraan).
 
 ## Sisältö
-- **Kaikki sisältö on kuvitteellista**: ei oikeita henkilöitä, asiakkaita eikä organisaation tietoja (ei sisäisiä nimiä, lukuja, järjestelmiä tai dokumentteja).
-- **Yksiköistä käytetään vain nimiä Yksikkö 1, Yksikkö 2 jne.** (sekä "Oma yksikkö" / "Oma yksikkösi" katsojan omalle yksikölle). Ei keksittyjä eikä oikeita yksikkönimiä, koska ne voivat paljastaa organisaation.
+- **Organisaation (Vero) saa mainita** nimeltä.
+- **Henkilöt, tiimit ja vinkit ovat keksittyjä.** Ei oikeita henkilöitä eikä asiakkaita, eikä organisaation sisäisiä tietoja (lukuja, järjestelmiä, dokumentteja).
+- **Yksiköistä käytetään vain nimiä Yksikkö 1, Yksikkö 2 jne.** (sekä "Oma yksikkö" / "Oma yksikkösi" katsojan omalle yksikölle). Ei keksittyjä eikä oikeita yksikkönimiä.
 - Repo on julkinen: kaikki mitä committaat, on heti julkista.
 
 ## Tekninen rakenne
@@ -23,6 +24,7 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 ## Ilme
 - Oletuksena **Neon 86**: 80-luvun Miami-estetiikka, **25.5 FM** -radioteema (neonvalot, auringonlasku, palmut).
 - Käyttäjä voi vaihtaa **asialliseen ilmeeseen**; molempien ilmeiden pitää toimia ja täyttää saavutettavuusvaatimukset.
+- **Ilmettä ei tummenneta.** Korostukset tehdään vaaleammilla sävyillä (esim. vaaleampi tausta tai neonkehys), ei tummentamalla.
 - **EI** pelien tai elokuvien logoja, fontteja, hahmoja tai tunnistettavia fraaseja.
 - **EI** rikos- tai poliisiteemaa (esim. poliisiautoja, -helikoptereita, aseita, rikoskuvastoa).
 
