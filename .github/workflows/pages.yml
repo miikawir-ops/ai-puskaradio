@@ -23,8 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # Publish only the site itself, so repo files (CLAUDE.md, README) stay off the site.
+      - name: Assemble site
+        run: |
+          mkdir _site
+          cp index.html _site/
+          cp -r fonts _site/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

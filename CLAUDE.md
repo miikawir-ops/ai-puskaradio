@@ -5,7 +5,7 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 ## Mikä tämä on
 - Klikattava **konseptidemo** työntekijöiden tekoälyvinkkien jakamiseen: **jaa, kokeile, arvioi, paranna**.
 - Ei oikea palvelu. Oikea MVP tehdään myöhemmin organisaation M365 / Copilot Studio -ympäristöön.
-- Julkaistaan GitHub Pagesissa (julkinen repo, GitHub Actions -workflow `.github/workflows/pages.yml`, julkaisee juurikansion jokaisella pushilla `main`-haaraan).
+- Julkaistaan GitHub Pagesissa (julkinen repo, GitHub Actions -workflow `.github/workflows/pages.yml`, julkaisee `index.html`:n ja `fonts/`-kansion jokaisella pushilla `main`-haaraan).
 
 ## Sisältö
 - **Kaikki sisältö on kuvitteellista**: ei oikeita henkilöitä, asiakkaita eikä organisaation tietoja (ei sisäisiä nimiä, lukuja, järjestelmiä tai dokumentteja).
