@@ -9,6 +9,7 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 
 ## Sisältö
 - **Kaikki sisältö on kuvitteellista**: ei oikeita henkilöitä, asiakkaita eikä organisaation tietoja (ei sisäisiä nimiä, lukuja, järjestelmiä tai dokumentteja).
+- **Yksiköistä käytetään vain nimiä Yksikkö 1, Yksikkö 2 jne.** (sekä "Oma yksikkö" / "Oma yksikkösi" katsojan omalle yksikölle). Ei keksittyjä eikä oikeita yksikkönimiä, koska ne voivat paljastaa organisaation.
 - Repo on julkinen: kaikki mitä committaat, on heti julkista.
 
 ## Tekninen rakenne
