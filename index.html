@@ -96,7 +96,6 @@ button { cursor: pointer; }
 .brand b { font-family: var(--f-display); font-size: 20px; font-weight: 800; letter-spacing: -0.02em; display: block; line-height: 1.1; }
 .brand small { display: block; font-size: 12px; color: var(--ink-2); }
 nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
-@media (max-width: 640px) { nav.tabs { flex: 1 1 100%; } }
 nav.tabs a { text-decoration: none; color: var(--ink-2); font-weight: 600; padding: 8px 12px; border-radius: 999px; }
 nav.tabs a:hover { background: var(--surface-2); color: var(--ink); }
 nav.tabs a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
@@ -118,6 +117,25 @@ nav.tabs a[aria-current="page"] { background: var(--accent-soft); color: var(--a
 /* Plain-skin intro row on Vinkit (the neon hero carries the same actions). */
 .intro { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; margin-bottom: 18px; box-shadow: var(--shadow); }
 .intro p { margin: 0; font-weight: 600; max-width: 60ch; }
+.m-only { display: none; }
+/* Compact top area on phones: one-line scrollable nav, short demo note, compact pill and share button. */
+@media (max-width: 640px) {
+  .m-hide { display: none; }
+  .m-only { display: inline; }
+  .top .wrap { gap: 6px 8px; padding-block: 6px; }
+  .brand { gap: 8px; margin-right: auto; }
+  .brand svg { width: 28px; height: 28px; }
+  .brand small { display: none; }
+  nav.tabs { order: 4; flex: 1 1 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -4px; }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs a { flex: none; white-space: nowrap; padding: 6px 10px; font-size: 14px; }
+  .me-pill { gap: 6px; padding: 3px 4px 3px 10px; font-size: 12px; }
+  .me-pill .lvl { padding: 2px 4px; }
+  #shareBtn { padding: 6px 10px; font-size: 13px; border-radius: 8px; }
+  .demo-strip { font-size: 12px; }
+  .demo-strip .wrap { padding-block: 5px; gap: 4px 12px; }
+  .demo-strip button { font-size: 12px; }
+}
 
 main { padding-block: 24px 64px; }
 .view-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
@@ -467,7 +485,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
 </header>
 <div class="demo-strip">
   <div class="wrap">
-    <span><b>Konseptidemo.</b> Kaikki vinkit, henkilöt ja luvut ovat kuvitteellisia. Toiminnot ovat kokeiltavissa, ja tekemäsi muutokset säilyvät vain omassa selaimessasi.</span>
+    <span class="m-hide"><b>Konseptidemo.</b> Kaikki vinkit, henkilöt ja luvut ovat kuvitteellisia. Toiminnot ovat kokeiltavissa, ja tekemäsi muutokset säilyvät vain omassa selaimessasi.</span>
+    <span class="m-only"><b>Konseptidemo</b> – kuvitteellinen sisältö.</span>
     <span class="row" style="gap:16px"><button type="button" id="skinBtn" class="skin-btn"></button><button type="button" id="resetBtn">Palauta demo alkutilaan</button></span>
   </div>
 </div>
@@ -1198,7 +1217,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const view = ["vinkit", "tulostaulu", "kysy", "oma", "miten"].includes(v) ? v : "vinkit";
     document.querySelectorAll("nav.tabs a").forEach((a) => a.setAttribute("aria-current", a.dataset.view === view ? "page" : "false"));
     const lv = level(S.me.alltime);
-    $("#mePill").innerHTML = '<span><span class="pts">' + S.me.season + '</span> p kaudella</span><span class="lvl">' + badge(lv.i, 20, true) + esc(lv.l.name) + "</span>";
+    $("#mePill").innerHTML = '<span><span class="pts">' + S.me.season + '</span> p<span class="m-hide"> kaudella</span></span><span class="lvl">' + badge(lv.i, 20, true) + '<span class="m-hide">' + esc(lv.l.name) + "</span></span>";
     $("#mePill").setAttribute("aria-label", "Oma Puskaradio: " + S.me.season + " pistettä tällä kaudella, taso " + lv.l.name);
     const m = $("#main");
     const focusQ = document.activeElement && document.activeElement.id === "q"; const caret = focusQ ? document.activeElement.selectionStart : 0;
