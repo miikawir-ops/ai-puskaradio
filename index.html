@@ -872,7 +872,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function leaderMini() {
     const rows = lbTab === "p" ? peopleRows() : lbTab === "t" ? teamRows() : unitRows();
     const btn = (k, l) => '<button type="button" data-lb="' + k + '" aria-pressed="' + (lbTab === k) + '">' + l + "</button>";
-    return '<section class="panel"><h2>Kauden kärki</h2><p class="sub">Kuka johtaa ' + esc(seasonInfo().name.toLowerCase()) + "a? Kausi nollautuu kuun vaihteessa.</p>" +
+    return '<section class="panel"><h2>Kauden tulostaulu</h2><p class="sub">Kuka johtaa ' + esc(seasonInfo().name.toLowerCase()) + "a? Kausi nollautuu kuun vaihteessa.</p>" +
       '<div class="seg" role="group" aria-label="Valitse taso">' + btn("p", "Yksilöt") + btn("t", "Tiimit") + btn("u", "Yksiköt") + "</div>" +
       lbList(rows, 3, UNITW[lbTab]) + '<a class="more-link" href="#tulostaulu">Koko tulostaulu →</a></section>';
   }
