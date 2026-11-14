@@ -147,6 +147,10 @@ main { padding-block: 24px 64px; }
 .card h3 { font-size: 16.5px; font-weight: 700; line-height: 1.3; }
 .card-link { all: unset; cursor: pointer; }
 .card-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--r); }
+/* Card action row sits above the whole-card click area of .card-link::after. */
+.card-act { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; }
+.tried { font-size: 12.5px; font-weight: 700; color: var(--ok); }
+#rateForm { scroll-margin-top: 76px; }
 .card-link:focus-visible::after { outline: 3px solid var(--accent); outline-offset: 2px; }
 .card .hyoty { margin: 0; font-size: 14px; color: var(--ink-2); flex: 1; }
 .cat { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--ink-2); }
@@ -754,7 +758,14 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<p class="hyoty">' + esc(t.hyoty) + "</p>" +
       '<div class="card-foot">' + (statusChip(t) || "<span></span>") + signal(t) + "</div>" +
       '<div class="by">' + badge(t.mine ? level(S.me.alltime).i : personLevel(t.author.name), 18, false) + "<span>" + (t.mine ? "Sinun vinkkisi" : esc(short(t.author.name)) + " · " + esc(t.author.unit)) + " · " + days(t.days) + "</span></div>" +
+      tryAction(t) +
       "</article>";
+  }
+  // Own and outdated tips get no action (outdated tips have no rating form).
+  function tryAction(t) {
+    if (t.mine || t.old) return "";
+    if (S.me.tried[t.id]) return '<div class="card-act"><span class="tried">Kokeiltu <span aria-hidden="true">✓</span></span></div>';
+    return '<div class="card-act"><button class="btn btn-blue btn-small" type="button" data-try="' + t.id + '" aria-label="Kokeile: ' + esc(t.title) + '">Kokeile</button></div>';
   }
   const latest = (list) => list.filter((t) => !hasChild(t));
 
@@ -1184,11 +1195,21 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
 
   document.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-lb],[data-open],[data-close],[data-cat],[data-improve],[data-answer],[data-sugg],[data-post],[data-copy],#tickBtn,#shareBtn,#heroShare,#obShare,#obAsk,#obHide,#skinBtn,#resetBtn,#simBtn,#fillEx,#backBtn,#ov");
+    const el = e.target.closest("[data-lb],[data-try],[data-open],[data-close],[data-cat],[data-improve],[data-answer],[data-sugg],[data-post],[data-copy],#tickBtn,#shareBtn,#heroShare,#obShare,#obAsk,#obHide,#skinBtn,#resetBtn,#simBtn,#fillEx,#backBtn,#ov");
     if (!el) return;
     if (el.id === "ov") { if (e.target === el) closeModal(); return; }
     if (el.dataset.lb) { lbTab = el.dataset.lb; render(); const b = document.querySelector('[data-lb="' + lbTab + '"]'); if (b) b.focus(); return; }
     if (el.dataset.open) { openTip(el.dataset.open); return; }
+    if (el.dataset.try) {
+      openTip(el.dataset.try);
+      const f = $("#rateForm");
+      if (f) {
+        const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+        f.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+        const r = f.querySelector("input[name=rating]"); if (r) r.focus({ preventScroll: true });
+      }
+      return;
+    }
     if ("close" in el.dataset) { closeModal(); return; }
     if (el.dataset.cat) { filterCat = el.dataset.cat; render(); return; }
     if (el.dataset.improve) { openShare({ improve: el.dataset.improve }); return; }
