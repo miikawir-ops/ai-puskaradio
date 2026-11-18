@@ -971,7 +971,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function viewLeaders() {
     const ppl = peopleRows(), tms = teamRows(), uns = unitRows();
     const lead = (rows, label, unit) => { const r = rows[0]; return '<div class="podium">' + (r.lv != null ? badge(r.lv, 44, false) : '<svg class="badge" width="44" height="44" viewBox="0 0 48 48" aria-hidden="true" style="color:var(--lv4)"><path d="M13 31l1.8-13 5.4 6.5L24 14l3.8 10.5 5.4-6.5L35 31z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>') + "<div><small>" + label + "</small><b>" + esc(r.label) + "</b><small>" + r.v + " " + unit + "</small></div></div>"; };
-    const top = latest(S.tips).filter((t) => !t.old && t.s > 0).sort((a, b) => seasonScore(b) - seasonScore(a)).slice(0, 5);
+    const top = latest(S.tips).filter((t) => !t.old && t.s > 0 && ["todettu", "tietyissa"].includes(status(t).k)).sort((a, b) => seasonScore(b) - seasonScore(a)).slice(0, 5);
     const brave = S.brave.concat([{ name: "Sinä", n: S.me.trials, me: true }]).sort((a, b) => b.n - a.n).slice(0, 5);
     return '<div class="view-head"><div><span class="eyebrow">' + esc(seasonInfo().name) + " · " + seasonInfo().left + ' päivää jäljellä</span><h1>Tulostaulu</h1><p>Kilpailu kolmella tasolla. Kausi nollautuu kuun vaihteessa, mutta tasot ja kausimerkit säilyvät. Listoilla näkyy kärki ja oma sijoituksesi. Tiimit kilpailevat jäsentä kohden lasketuilla pisteillä, joten pienikin tiimi voi voittaa.</p></div></div>' +
       '<div class="lb-grid">' +
@@ -987,7 +987,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       brave.map((b, i) => '<li class="' + (b.me ? "me " : "") + (i < 3 ? "lead3" : "") + '"><span class="n">' + (i + 1) + '</span><span class="who-cell">' + badge(b.me ? level(S.me.alltime).i : personLevel(b.name), 24, false) + "<span>" + esc(b.name) + '</span></span><span class="v">' + b.n + " kokeilua</span></li>").join("") + "</ol></section></div>";
   }
   function rail() {
-    const top = latest(S.tips).filter((t) => !t.old && t.s > 0).sort((a, b) => seasonScore(b) - seasonScore(a)).slice(0, 5);
+    const top = latest(S.tips).filter((t) => !t.old && t.s > 0 && ["todettu", "tietyissa"].includes(status(t).k)).sort((a, b) => seasonScore(b) - seasonScore(a)).slice(0, 5);
     const brave = S.brave.concat([{ name: "Sinä", n: S.me.trials, me: true }]).sort((a, b) => b.n - a.n).slice(0, 5);
     return '<aside class="rail" aria-label="Kauden listat ja kysymykset">' +
       '<section class="panel"><h2>Kuun hyödyllisimmät</h2><p class="sub">Vinkit, jotka toimivat tässä kuussa useimmille.</p><ol class="rank">' +
