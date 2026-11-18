@@ -703,6 +703,14 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
           miten: "Pyydän Copilotia tiivistämään jokaisen luvun yhteen virkkeeseen. Lista näyttää heti, missä punainen lanka katkeaa.",
           prompti: "Tiivistä tämän raportin jokainen luku yhteen virkkeeseen. Merkitse sen jälkeen kohdat, joissa luvun sisältö ei näytä jatkavan edellisestä.",
           author: { name: "Antti Heikkinen", unit: "Yksikkö 5" }, days: 4, r: { hyvin: 3, osittain: 1, ei: 0, tark: 0 }, s: 4 }),
+        t({ id: "t15", title: "Pitkän tekstin kolme ydinviestiä", cat: "tiiv", tool: "Copilot Chat",
+          hyoty: "Saat pitkästä tekstistä kolme ydinviestiä esimerkiksi tiedotteen pohjaksi.",
+          tehtava: "Tiedotteet ja tiivistelmät, joissa pitää kertoa olennainen lyhyesti.",
+          miten: "Pyydän Copilotia nostamaan tekstistä kolme tärkeintä viestiä ja perustelemaan valinnan yhdellä lauseella.",
+          prompti: "Nosta tästä tekstistä kolme tärkeintä viestiä. Kirjoita kukin yhdellä virkkeellä ja perustele valinta lyhyesti. Älä lisää mitään, mitä tekstissä ei ole.",
+          author: { name: "Olli Rantanen", unit: "Oma yksikkö" }, days: 5, r: { hyvin: 2, osittain: 1, ei: 0, tark: 1 }, s: 4,
+          // Per-trial records (only this seed tip has them): used for the cross-team rule in team points.
+          trials: [{ by: "Hanna Lindqvist", r: "hyvin" }, { by: "Pekka Nieminen", r: "hyvin" }, { by: "Laura Virtanen", r: "osittain" }, { by: "Mikko Salo", r: "tark" }] }),
         t({ id: "m1", mine: true, title: "Muistion kieliasun viimeistely", cat: "kirj", tool: "Word",
           hyoty: "Muistio hioutuu lopulliseen muotoon nopeammin ja sisältö pysyy ennallaan.",
           tehtava: "Valmiin muistion viimeinen läpikäynti.",
@@ -922,9 +930,18 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   }
   // Team points count only activity aimed outside the own team (teammates trying each other's tips don't count).
   const teamOf = (name) => (PEOPLE.find((p) => p.name === name) || {}).team;
+  // Sharer points per trial: +2 tried, +3 "toimi hyvin", +1 "toimi osittain" / "vaati tarkistamista".
+  const SHARER_PTS = { hyvin: 5, osittain: 3, tark: 3, ei: 2 };
+  // Points a team earns from trials of its members' tips by people outside the team.
+  function crossTeamPts(team) {
+    let p = 0;
+    S.tips.forEach((t) => { if (!t.trials || t.mine || teamOf(t.author.name) !== team) return; t.trials.forEach((x) => { if (teamOf(x.by) !== team) p += SHARER_PTS[x.r] || 0; }); });
+    return p;
+  }
   function teamRows() {
     return TEAMS.map((t) => {
       let tot = t.base; PEOPLE.forEach((p) => { if (p.team === t.name) tot += p.s; });
+      tot += crossTeamPts(t.name);
       if (t.name === MY_TEAM) tot += S.me.season - (S.me.ownTeamPts || 0);
       return { label: t.name, sub: t.unit + " · " + t.size + " jäsentä", v: Math.round(tot / t.size), me: t.name === MY_TEAM };
     }).sort((a, b) => b.v - a.v);
