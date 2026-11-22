@@ -252,6 +252,22 @@ main { padding-block: 24px 64px; }
 .kv dt { color: var(--ink-2); font-size: 13.5px; }
 .kv dd { margin: 0; min-width: 0; }
 .linkbtn { background: none; border: 0; padding: 0; margin-top: 12px; color: var(--accent); font-weight: 700; font-size: 13.5px; text-decoration: underline; }
+.linkbtn.sm { margin-top: 4px; font-size: 12.5px; }
+.helpful { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--ok); }
+.helpful svg, .mark.first svg { width: 13px; height: 13px; }
+.mark.first { color: var(--accent); }
+.thanks { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); }
+.thanks .done { font-weight: 700; color: var(--ok); }
+/* Puskaradio feed: positive events only, newest first. */
+.feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.feed li { font-size: 13.5px; line-height: 1.4; border-left: 3px solid var(--line); padding-left: 10px; }
+.feed li.mine { border-left-color: var(--signal); }
+.feed time { display: block; margin-top: 2px; font-size: 12px; color: var(--ink-2); }
+.onair { display: none; }
+body.neon .onair { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--pink); color: #FFD6EA; font-family: var(--f-body); font-size: 11px; font-weight: 800; letter-spacing: .08em; vertical-align: 3px; }
+body.neon .onair i { width: 7px; height: 7px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 6px var(--pink); }
+body.neon .feed li { border-left-color: var(--cyan); }
+body.neon .feed li.mine { border-left-color: var(--pink); }
 @media (max-width: 520px) { .kv { grid-template-columns: minmax(0,1fr); } .kv dt { margin-top: 6px; } }
 .prompt { position: relative; background: var(--surface-2); border-radius: 10px; padding: 14px 14px 46px; font-family: var(--f-mono); font-size: 13.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .prompt .copy { position: absolute; right: 10px; bottom: 10px; }
@@ -449,6 +465,7 @@ body.neon .badge { filter: drop-shadow(0 0 4px currentColor); }
 .mark { display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; font-size: 11.5px; font-weight: 800; color: var(--gold); vertical-align: 1px; }
 .mark svg { width: 13px; height: 13px; }
 .marks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.marks .first-mark { background: var(--accent-soft); color: var(--accent); }
 .marks span { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: var(--gold-soft); color: var(--gold); }
 .marks svg { width: 13px; height: 13px; }
 .rank li .sub2 { display: block; font-size: 12px; color: var(--ink-2); font-weight: 500; }
@@ -574,10 +591,28 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     "Antti Heikkinen": ["Syyskuu 2026: kärkikolmikko"]
   };
   const MY_MARKS = ["Syyskuu 2026: voittajatiimin jäsen (Kasettikopio)"];
+  // Finnish genitive of first names, for feed sentences ("Pekan vinkki").
+  const GEN = { Laura: "Lauran", Pekka: "Pekan", Anna: "Annan", Sara: "Saran", Antti: "Antin", Jenni: "Jennin", Mikko: "Mikon", Riikka: "Riikan", Olli: "Ollin", Ville: "Villen", Tiina: "Tiinan", Juha: "Juhan", Elina: "Elinan", Hanna: "Hannan" };
+  const FIRST_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8l1.2 3.6 3.6 1.2-3.6 1.2L8 11.4 6.8 7.8 3.2 6.6l3.6-1.2zM12.6 10.4l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z" fill="currentColor"/></svg>';
+  const CHECK_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  // Fictional feed events (minutes ago). Positive events only; never a trial's result.
+  const FEED_SEED = [
+    { type: "try", who: "Laura Virtanen", owner: "Pekka Nieminen", title: "Ohjeluonnoksen tarkistus kriittisen lukijan silmin", ago: 12 },
+    { type: "status", owner: "Anna Lehtinen", title: "Sähköpostiketjun avoimet päätökset listaksi", status: "Todettu toimivaksi", ago: 55 },
+    { type: "try", who: null, owner: "Sara Koskinen", title: "Palaverin valmistelukysymykset", ago: 130 },
+    { type: "unit", unit: "Yksikkö 5", ago: 180 },
+    { type: "try", who: "Jenni Mäkelä", owner: "Antti Heikkinen", title: "Excel-kaavan selitys ja virheen etsintä", ago: 240 },
+    { type: "level", who: "Antti Heikkinen", level: "Mestari", ago: 300 },
+    { type: "share", who: "Mikko Salo", title: "Diaesityksen runko muistiosta", ago: 1200 },
+    { type: "team", team: "Neon Nörtit", ago: 1560 },
+    { type: "share", who: "Antti Heikkinen", title: "Pitkän raportin rakenteen tarkistus", ago: 5760 },
+    { type: "improve", who: "Sara Koskinen", owner: "Laura Virtanen", title: "Asiakirjaversioiden erot taulukoksi lähdekohtineen", ago: 12960 }
+  ];
   const HALL = [
     { season: "Lokakuu 2026", person: "Pekka Nieminen", team: "Laserkynät", unit: "Yksikkö 5", tip: "Sähköpostiketjun avoimet päätökset listaksi" },
     { season: "Syyskuu 2026", person: "Laura Virtanen", team: "Kasettikopio", unit: "Yksikkö 1", tip: "Excel-kaavan selitys ja virheen etsintä" }
   ];
+  const firstTag = (on) => on ? '<span class="mark first" title="Ensimmäinen vinkki jaettu">' + FIRST_ICON + '<span class="sr"> Ensimmäinen vinkki jaettu</span></span>' : "";
   function markTag(n) { return n ? '<span class="mark" title="' + n + ' kausimerkkiä">' + STAR + n + '<span class="sr"> kausimerkkiä</span></span>' : ""; }
   const TEAMS = [
     { name: "Neon Nörtit", unit: "Yksikkö 1", size: 5, base: 150 },
@@ -602,7 +637,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
           prompti: "Käy läpi tämä sähköpostiketju. Listaa erikseen\n1) tehdyt päätökset,\n2) avoimet kysymykset ja\n3) kenen vastuulla kukin avoin asia on.\nJos jokin on epäselvää, merkitse se kysymysmerkillä äläkä arvaa.",
           tarkistin: "Kävin ketjun viimeiset viestit itse läpi ja vertasin listaan.",
           author: { name: "Anna Lehtinen", unit: "Yksikkö 3" }, days: 41, r: { hyvin: 19, osittain: 4, ei: 2, tark: 2 }, s: 9,
-          notes: [{ t: "Kysymysmerkkiohje on tärkeä, ilman sitä Copilot arvasi vastuuhenkilöt.", d: 12 }, { t: "Toimii parhaiten, kun ketjussa on alle 30 viestiä.", d: 20 }] }),
+          notes: [{ t: "Kysymysmerkkiohje on tärkeä, ilman sitä Copilot arvasi vastuuhenkilöt.", d: 12, helpful: true }, { t: "Toimii parhaiten, kun ketjussa on alle 30 viestiä.", d: 20 }] }),
         t({ id: "t2", title: "Kahden asiakirjaversion erot", cat: "tiiv", tool: "Word",
           hyoty: "Löydät kahden version sisällölliset erot ilman rivi riviltä lukemista.",
           tehtava: "Ohjeen, muistion tai sopimusluonnoksen eri versioiden vertailu.",
@@ -729,6 +764,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       ],
       me: {
         season: 46, alltime: 212, trials: 5, tried: {},
+        firstTip: true, // first-tip mark already earned with m1; "Palauta demo" keeps it, so the bonus can't repeat
         ledger: [
           { t: "Vinkkiäsi kokeiltiin, ja se toimi hyvin", p: 5, d: 2 },
           { t: "Kokeilit vinkkiä ja annoit arvion kommentin kera", p: 5, d: 3 },
@@ -736,12 +772,13 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
           { t: "Vinkkisi ylitti 5 kokeilua", p: 5, d: 6 }
         ],
         notifs: [
-          { t: "Vinkkiäsi “Muistion kieliasun viimeistely” kokeili 7 kollegaa. Yksi kertoi, mitä muuttaisi.", d: 2 },
+          { t: "Vinkkiäsi “Muistion kieliasun viimeistely” kokeili 7 kollegaa. Yksi kertoi, mitä muuttaisi.", d: 2, tip: "m1" },
           { t: "Vinkkisi sai Todettu toimivaksi -statuksen.", d: 6 },
           { t: "Sara Koskinen paransi vinkkiä, jonka kokeilit: “Asiakirjaversioiden erot taulukoksi lähdekohtineen”.", d: 9 }
         ]
       },
-      chat: []
+      chat: [],
+      feed: FEED_SEED.map((e) => Object.assign({ at: Date.now() - e.ago * 60000 }, e))
     };
   }
 
@@ -752,6 +789,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
   S = load() || seed();
+  if (!S.feed) S.feed = seed().feed; // state saved before the feed existed
 
   /* ---------- helpers ---------- */
   const $ = (s, el) => (el || document).querySelector(s);
@@ -830,9 +868,9 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   const latest = (list) => list.filter((t) => !hasChild(t));
 
   /* ---------- toast & points ---------- */
-  function toast(html) {
+  function toast(html, ms) {
     const el = document.createElement("div"); el.className = "toast"; el.innerHTML = html;
-    $("#toasts").appendChild(el); setTimeout(() => el.remove(), 3600);
+    $("#toasts").appendChild(el); setTimeout(() => el.remove(), ms || 3600);
   }
   function award(p, label) {
     const before = level(S.me.alltime).i;
@@ -840,7 +878,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     S.me.ledger.unshift({ t: label, p, d: 0 });
     toast("<b>+" + p + "</b> " + esc(label));
     const after = level(S.me.alltime);
-    if (after.i > before) setTimeout(() => toast(badge(after.i, 30, true) + "Uusi taso: <b>" + esc(after.l.name) + "</b>"), 700);
+    if (after.i > before) { feedAdd({ type: "level", who: "me", level: after.l.name }); setTimeout(() => toast(badge(after.i, 30, true) + "Uusi taso: <b>" + esc(after.l.name) + "</b>"), 700); }
   }
 
   /* ---------- views ---------- */
@@ -924,8 +962,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   }
   function personLevel(name) { const p = PEOPLE.find((x) => x.name === name); return p ? level(p.a).i : 0; }
   function peopleRows() {
-    return PEOPLE.map((p) => ({ label: p.name, sub: p.team + " · " + p.unit, v: p.s, lv: level(p.a).i, marks: (MARKS[p.name] || []).length }))
-      .concat([{ label: S.me.hideName ? "Sinä (nimi piilotettu muilta)" : "Sinä", sub: MY_TEAM + " · Oma yksikkösi", v: S.me.season, lv: level(S.me.alltime).i, me: true, marks: MY_MARKS.length }])
+    return PEOPLE.map((p) => ({ label: p.name, sub: p.team + " · " + p.unit, v: p.s, lv: level(p.a).i, marks: (MARKS[p.name] || []).length, first: S.tips.some((t) => !t.mine && t.author.name === p.name) }))
+      .concat([{ label: S.me.hideName ? "Sinä (nimi piilotettu muilta)" : "Sinä", sub: MY_TEAM + " · Oma yksikkösi", v: S.me.season, lv: level(S.me.alltime).i, me: true, marks: MY_MARKS.length, first: S.me.firstTip !== false }])
       .sort((a, b) => b.v - a.v);
   }
   // Team points count only activity aimed outside the own team (teammates trying each other's tips don't count).
@@ -958,7 +996,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const show = rows.slice(0, n).map((r, i) => ({ r, i }));
     if (own >= n) show.push({ r: rows[own], i: own });
     return '<ol class="rank">' + show.map(({ r, i }) => '<li class="' + (r.me ? "me " : "") + (i < 3 ? "lead3" : "") + '"><span class="n">' + (i + 1) + '</span><span class="who-cell">' +
-      (r.lv != null ? badge(r.lv, 24, false) : "") + "<span>" + esc(r.label) + markTag(r.marks) + (r.sub ? '<span class="sub2">' + esc(r.sub) + "</span>" : "") + '</span></span><span class="v">' + r.v + " " + unitWord + "</span></li>").join("") + "</ol>";
+      (r.lv != null ? badge(r.lv, 24, false) : "") + "<span>" + esc(r.label) + firstTag(r.first) + markTag(r.marks) + (r.sub ? '<span class="sub2">' + esc(r.sub) + "</span>" : "") + '</span></span><span class="v">' + r.v + " " + unitWord + "</span></li>").join("") + "</ol>";
   }
   let lbTab = "p";
   function leaderMini() {
@@ -986,12 +1024,40 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<section class="panel"><h2>Kuun rohkeimmat kokeilijat</h2><p class="sub">Eniten kollegoiden vinkkejä kokeilleet.</p><ol class="rank">' +
       brave.map((b, i) => '<li class="' + (b.me ? "me " : "") + (i < 3 ? "lead3" : "") + '"><span class="n">' + (i + 1) + '</span><span class="who-cell">' + badge(b.me ? level(S.me.alltime).i : personLevel(b.name), 24, false) + "<span>" + esc(b.name) + '</span></span><span class="v">' + b.n + " kokeilua</span></li>").join("") + "</ol></section></div>";
   }
+  /* ---------- Puskaradio feed ---------- */
+  function feedAdd(e) { S.feed = S.feed || []; S.feed.unshift(Object.assign({ at: Date.now() }, e)); S.feed = S.feed.slice(0, 30); }
+  const firstName = (n) => String(n).split(" ")[0];
+  function feedName(n, neon) { if (n === "me") return S.me.hideName ? "Nimetön kollega" : "Sinä"; if (!n) return "Nimetön kollega"; return neon ? firstName(n) : short(n); }
+  function feedGen(n) { if (n === "me") return "sinun"; const f = firstName(n); return GEN[f] || f + "n"; }
+  const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+  function ago(at) { const m = Math.max(0, Math.round((Date.now() - at) / 60000)); return m < 1 ? "juuri nyt" : m < 60 ? m + " min sitten" : m < 1440 ? Math.round(m / 60) + " t sitten" : days(Math.round(m / 1440)); }
+  // Text per skin: neon in a radio host's voice, plain skin calm. Results of trials are never included.
+  function feedText(e, neon) {
+    const me = e.who === "me" && !S.me.hideName, who = feedName(e.who, neon), T = "“" + e.title + "”";
+    const ownTip = (o) => o === "me" ? "vinkkiäsi" : feedGen(o) + " vinkkiä";
+    switch (e.type) {
+      case "try": return (neon ? "Taajuudella: " : "") + (me ? "Kokeilit " : who + " kokeili ") + ownTip(e.owner) + " " + T + ".";
+      case "share": return me ? (neon ? "Uusi kappale soittolistalla: sinun vinkkisi " : "Jaoit uuden vinkin: ") + T + "." : (neon ? "Uusi kappale soittolistalla: " + feedGen(e.who) + " vinkki " + T + "." : "Uusi vinkki kierrossa: " + T + " (" + who + ").");
+      case "improve": return (neon ? "Remix-vuorossa: " : "") + (me ? "Teit" : who + " teki") + " parannetun version " + (e.owner === "me" ? "vinkistäsi" : feedGen(e.owner) + " vinkistä") + " " + T + ".";
+      case "status": return (neon ? "Hittilistalle! " : "") + (e.owner === "me" ? "Vinkkisi" : cap(feedGen(e.owner)) + " vinkki") + " " + T + " sai " + e.status + " -statuksen.";
+      case "level": return (me ? "Nousit" : who + " nousi") + " tasolle " + e.level + "." + (neon ? " Onnittelut studiosta!" : "");
+      case "unit": return (neon ? "Kärkikuulumisia: " : "") + e.unit + " nousi yksiköiden kisan kärkeen.";
+      case "team": return (neon ? "Tiimien kisan kärjessä keikkuu nyt " : "Tiimien kisaa johtaa nyt ") + e.team + ".";
+    }
+    return "";
+  }
+  function feedPanel() {
+    const neon = skin === "neon";
+    return '<section class="panel feed-panel"><h2>Puskaradio-feed<span class="onair"><i aria-hidden="true"></i>SUORANA</span></h2><p class="sub">' + (neon ? "Studio kertoo, mitä taajuudella tapahtuu juuri nyt." : "Viimeisimmät tapahtumat Puskaradiossa.") + '</p><ol class="feed">' +
+      (S.feed || []).slice(0, 6).map((e) => '<li class="' + (e.who === "me" || e.owner === "me" ? "mine" : "") + '">' + esc(feedText(e, neon)) + '<time datetime="' + new Date(e.at).toISOString() + '">' + ago(e.at) + "</time></li>").join("") + "</ol></section>";
+  }
   function rail() {
     const top = latest(S.tips).filter((t) => !t.old && t.s > 0 && ["todettu", "tietyissa"].includes(status(t).k)).sort((a, b) => seasonScore(b) - seasonScore(a)).slice(0, 5);
     const brave = S.brave.concat([{ name: "Sinä", n: S.me.trials, me: true }]).sort((a, b) => b.n - a.n).slice(0, 5);
     return '<aside class="rail" aria-label="Kauden listat ja kysymykset">' +
       '<section class="panel"><h2>Kuun hyödyllisimmät</h2><p class="sub">Vinkit, jotka toimivat tässä kuussa useimmille.</p><ol class="rank">' +
       top.map((t, i) => '<li><span class="n">' + (i + 1) + '</span><button type="button" data-open="' + t.id + '">' + esc(t.title) + '</button><span class="v">' + pubCount(t, t.s) + " kok.</span></li>").join("") + "</ol></section>" +
+      feedPanel() +
       leaderMini() +
       '<section class="panel"><h2>Avoimet kysymykset</h2><p class="sub">Kysymyksiä, joihin ei vielä löytynyt vinkkiä.</p>' +
       (S.questions.length ? S.questions.map((q) => '<div class="q"><p>' + esc(q.text) + '</p><div class="meta"><span>' + esc(q.by) + " · " + days(q.days) + '</span><button class="btn btn-ghost btn-small" type="button" data-answer="' + q.id + '">Vastaa vinkillä</button></div></div>').join("") : '<p class="sub">Kaikkiin kysymyksiin on vastattu.</p>') +
@@ -1044,6 +1110,17 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     return h + "</div>";
   }
 
+  // One comment row. On own tips the sharer can mark it helpful (commenter +2, once); others see a small tag.
+  function noteItem(t, n, i) {
+    const tag = n.helpful ? '<span class="helpful">' + CHECK_ICON + (t.mine ? "Merkitsit hyödylliseksi" : "Jakaja merkitsi hyödylliseksi") + "</span>" : "";
+    const btn = t.mine && !n.helpful ? '<button class="linkbtn sm" type="button" data-helpful="' + t.id + "|" + i + '">Merkitse hyödylliseksi</button>' : "";
+    return "<li>" + esc(n.t) + "<small>" + (n.by ? esc(n.by) + " · " : "") + days(n.d) + "</small>" + tag + btn + "</li>";
+  }
+  // "Kiitä kokeilijoita": no points, never reveals who tried. Can be sent again after new trials.
+  function thanksRow(t) {
+    const n = stats(t).n; if (!t.mine || !n) return "";
+    return '<div class="thanks">' + (t.thankedN === n ? '<span class="done">Kiitit kokeilijoita ✓</span>' : '<button class="btn btn-ghost btn-small" type="button" data-thank="' + t.id + '">Kiitä kokeilijoita</button>') + "<span>Kiitos menee kaikille kokeilijoille. Et näe, keitä he ovat.</span></div>";
+  }
   function viewMe() {
     const lv = level(S.me.alltime);
     const pct = lv.next ? Math.round(((S.me.alltime - lv.l.min) / (lv.next.min - lv.l.min)) * 100) : 100;
@@ -1052,11 +1129,11 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<div class="me-grid">' +
       '<section class="panel"><span class="eyebrow">Taso</span><div class="lvl-head">' + badge(lv.i, 64, true) + '<div class="big" style="font-size:28px">' + esc(lv.l.name) + '</div></div><div class="prog" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100" aria-label="Eteneminen seuraavalle tasolle"><i style="width:' + pct + '%"></i></div><p class="sub" style="margin:0">' + (lv.next ? lv.next.min - S.me.alltime + " pistettä tasoon " + esc(lv.next.name) : "Korkein taso saavutettu") + '</p><div class="lvl-row">' + LEVELS.map((l, i) => '<div class="' + (i <= lv.i ? "" : "locked") + '">' + badge(i, 36, true) + esc(l.name) + "<small>" + l.min + " p</small></div>").join("") + "</div></section>" +
       '<section class="panel"><span class="eyebrow">' + esc(seasonInfo().name) + '</span><div class="big" style="margin-top:6px">' + S.me.season + '</div><p class="sub" style="margin:6px 0 0">pistettä tällä kaudella. Kauden pisteet nollautuvat kuun vaihteessa.</p></section>' +
-      '<section class="panel"><span class="eyebrow">Kaikkiaan</span><div class="big" style="margin-top:6px">' + S.me.alltime + '</div><p class="sub" style="margin:6px 0 0">pistettä yhteensä, ja ne nostavat pysyvää tasoasi. Kokeilit ' + S.me.trials + ' vinkkiä tässä kuussa.</p><label class="optout"><input type="checkbox" id="hideName"' + (S.me.hideName ? " checked" : "") + '> Piilota nimeni tulostaululta (pisteet ja taso säilyvät)</label><span class="eyebrow" style="display:block;margin-top:14px">Kausimerkkisi</span><div class="marks">' + MY_MARKS.map((m) => "<span>" + STAR + esc(m) + "</span>").join("") + "</div></section></div>" +
-      '<div class="two"><section class="panel"><h2>Ilmoitukset</h2><p class="sub">Mitä vinkeillesi on tapahtunut.</p><ul class="notes">' + S.me.notifs.slice(0, 6).map((n) => "<li>" + esc(n.t) + "<small>" + (n.by ? esc(n.by) + " · " : "") + days(n.d) + "</small></li>").join("") + "</ul></section>" +
+      '<section class="panel"><span class="eyebrow">Kaikkiaan</span><div class="big" style="margin-top:6px">' + S.me.alltime + '</div><p class="sub" style="margin:6px 0 0">pistettä yhteensä, ja ne nostavat pysyvää tasoasi. Kokeilit ' + S.me.trials + ' vinkkiä tässä kuussa.</p><label class="optout"><input type="checkbox" id="hideName"' + (S.me.hideName ? " checked" : "") + '> Piilota nimeni tulostaululta (pisteet ja taso säilyvät)</label><span class="eyebrow" style="display:block;margin-top:14px">Merkkisi</span><div class="marks">' + (S.me.firstTip !== false ? '<span class="first-mark">' + FIRST_ICON + "Ensimmäinen vinkki jaettu</span>" : "") + MY_MARKS.map((m) => "<span>" + STAR + esc(m) + "</span>").join("") + "</div></section></div>" +
+      '<div class="two"><section class="panel"><h2>Ilmoitukset</h2><p class="sub">Mitä vinkeillesi on tapahtunut.</p><ul class="notes">' + S.me.notifs.slice(0, 6).map((n) => "<li>" + esc(n.t) + "<small>" + (n.by ? esc(n.by) + " · " : "") + days(n.d) + "</small>" + (n.tip && tip(n.tip) ? thanksRow(tip(n.tip)) : "") + "</li>").join("") + "</ul></section>" +
       '<section class="panel"><h2>Pistetapahtumat</h2><p class="sub">Viimeisimmät ansaitut pisteet.</p><ul class="ledger">' + S.me.ledger.slice(0, 8).map((l) => "<li><span>" + esc(l.t) + "</span><b>+" + l.p + "</b></li>").join("") + "</ul></section></div>" +
       '<section class="panel" style="margin-top:16px"><h2>Omat vinkkisi</h2><p class="sub">Arviot näkyvät sinulle nimettöminä koosteena. Muut näkevät vain statuksen ja kokeilumäärän.</p>' +
-      (mine.length ? mine.map((t) => { const s = stats(t); return '<div class="mytip"><div class="row" style="justify-content:space-between"><button class="btn btn-ghost btn-small" type="button" data-open="' + t.id + '">' + esc(t.title) + "</button><span class=\"row\" style=\"gap:10px\">" + statusChip(t) + signal(t, true) + '</span></div><div class="fb"><div><b>' + t.r.hyvin + "</b>Toimi hyvin</div><div><b>" + t.r.osittain + "</b>Toimi osittain</div><div><b>" + t.r.ei + "</b>Ei toiminut</div><div><b>" + t.r.tark + "</b>Vaati tarkistamista</div></div>" + (t.notes.length ? '<ul class="notes">' + t.notes.slice(0, 3).map((n) => "<li>" + esc(n.t) + "<small>" + (n.by ? esc(n.by) + " · " : "") + days(n.d) + "</small></li>").join("") + "</ul>" : '<p class="sub">Ei vielä kommentteja.</p>') + "</div>"; }).join("") : '<div class="empty">Et ole vielä jakanut vinkkiä.</div>') +
+      (mine.length ? mine.map((t) => { const s = stats(t); return '<div class="mytip"><div class="row" style="justify-content:space-between"><button class="btn btn-ghost btn-small" type="button" data-open="' + t.id + '">' + esc(t.title) + "</button><span class=\"row\" style=\"gap:10px\">" + statusChip(t) + signal(t, true) + '</span></div><div class="fb"><div><b>' + t.r.hyvin + "</b>Toimi hyvin</div><div><b>" + t.r.osittain + "</b>Toimi osittain</div><div><b>" + t.r.ei + "</b>Ei toiminut</div><div><b>" + t.r.tark + "</b>Vaati tarkistamista</div></div>" + (t.notes.length ? '<ul class="notes">' + t.notes.slice(0, 3).map((n, i) => noteItem(t, n, i)).join("") + "</ul>" : '<p class="sub">Ei vielä kommentteja.</p>') + "</div>"; }).join("") : '<div class="empty">Et ole vielä jakanut vinkkiä.</div>') +
       "</section>";
   }
 
@@ -1079,7 +1156,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       ["Jaa vinkki", "Jakaja", "+5", "Enintään 3 vinkkiä viikossa"], ["Vinkkisi saa ensimmäisen kokeilunsa", "Jakaja", "+5", ""], ["“Miten tarkistin?” täytetty", "Jakaja", "+1", ""],
       ["Joku kokeili vinkkiäsi", "Jakaja", "+2", ""], ["…ja se toimi hyvin / osittain tai vaati tarkistamista", "Jakaja", "+3 / +1", ""], ["Vaikuttavuusbonus 5 / 10 / 25 kokeilijaa", "Jakaja", "+5 / +10 / +20", "Kerran per raja"],
       ["Kokeilu ja arvio", "Kokeilija", "+3", "Kerran per vinkki"], ["Ensimmäinen kokeilija", "Kokeilija", "+3", ""], ["Kirjallinen palaute", "Kokeilija", "+2", "Vähintään 20 merkkiä"],
-      ["Parannettu versio", "Parantaja / alkuperäinen tekijä", "+8 / +5", ""], ["Hyväksytty vastaus avoimeen kysymykseen", "Vastaaja", "+5", ""], ["Vinkin avaaminen tai oman vinkin kokeilu", "", "0", ""]
+      ["Parannettu versio", "Parantaja / alkuperäinen tekijä", "+8 / +5", ""], ["Parannettua versiota kokeiltiin", "Alkuperäinen tekijä", "+1", "Jokaisesta kokeilusta"],
+      ["Ensimmäinen jaettu vinkki", "Jakaja", "+5", "Kerran, lisäksi Ensimmäinen vinkki -merkki"], ["Kommenttisi merkittiin hyödylliseksi", "Kommentoija", "+2", "Kerran per kommentti"], ["Kiitos kokeilijoille", "", "0", "Ei paljasta kokeilijoita"], ["Hyväksytty vastaus avoimeen kysymykseen", "Vastaaja", "+5", ""], ["Vinkin avaaminen tai oman vinkin kokeilu", "", "0", ""]
     ];
     return '<div class="view-head"><div><span class="eyebrow">Säännöt lyhyesti</span><h1>Miten Puskaradio toimii</h1><p>Hyvä käyttötapa kulkee työkaverilta toiselle ja paranee matkalla. Jakaminen on aina turvallista: jokainen vinkki on arvokas, myös se, joka ei toiminut.</p></div></div>' +
       '<div class="why"><div><b>Tavoite</b>Tekoälyn hyödyntämistä halutaan lisätä ja vahvistaa kaikissa työtehtävissä.</div><div><b>Haaste</b>Hyvät käyttötavat jäävät yksittäisten työntekijöiden tietoon, ja sama ongelma ratkaistaan moneen kertaan.</div><div><b>Ratkaisu</b>AI Puskaradio tekee jakamisesta helppoa ja kokeilemisesta palkitsevaa. Hyvä tapa leviää ja paranee matkalla.</div></div>' +
@@ -1093,6 +1171,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<li><span class="status st-tietyissa">' + ICON.half + 'Toimii tietyissä tilanteissa</span><small>Vähintään 5 kokeilua ja vähintään 70 %:lla “toimi hyvin” tai “toimi osittain”</small></li>' +
       '<li><span class="status st-vanha">' + ICON.clock + 'Vanhentunut</span><small>Viimeisestä kokeilusta on yli 6 kuukautta, tai useampi käyttäjä ilmoittaa, ettei menetelmä enää toimi. Ei koskaan heikkojen arvioiden perusteella.</small></li></ul></section>' +
       '<section class="panel"><h2>Kilpailu kolmella tasolla</h2><ul class="notes"><li><b>Yksilöt:</b> kauden pisteet. Listalla kärkikymmenikkö ja oma sijoitus, nimen voi piilottaa.</li><li><b>Tiimit:</b> kauden pisteet jäsentä kohden, joten pienikin tiimi voi voittaa. Tiimipisteisiin lasketaan vain oman tiimin ulkopuolelle kohdistuva toiminta: tiimiläisten kokeilut toistensa vinkkeihin eivät kerrytä niitä.</li><li><b>Yksiköt:</b> kuinka paljon yksikön vinkit leviävät muihin yksiköihin.</li></ul><p class="sub" style="margin:10px 0 0">Kausi nollautuu kuukausittain, mutta tasot säilyvät aina. Kauden kärkikolmikko ja voittajatiimi saavat pysyvän kausimerkin, ja voittajat jäävät kunniagalleriaan. Listoilla näkyy vain kärki ja oma sijoitus, joten kukaan ei jää julkisesti häntäpäähän.</p></section>' +
+      '<section class="panel"><h2>Feed, kiitokset ja nimettömyys</h2><ul class="notes"><li>Puskaradio-feed kertoo vain myönteisiä tapahtumia: jakoja, kokeiluja, parannuksia, tasonnousuja ja statuksia.</li><li>Kokeilun tulosta ei kerrota feedissä koskaan. Tulokset näkyvät vain koosteina: status, taso ja kausimerkki.</li><li>Nimensä piilottaneet näkyvät feedissä nimettöminä.</li><li>Jakaja voi merkitä kommentin hyödylliseksi. Nimettömän kommentoijan henkilöllisyys ei paljastu jakajalle.</li><li>Jakaja voi kiittää kokeilijoita. Kiitos menee kaikille kokeilijoille paljastamatta heitä jakajalle.</li></ul></section>' +
       '<section class="panel"><h2>Periaatteet</h2><ol class="principles"><li>Menetelmä, ei dataa</li><li>Hyöty ennen näyttävyyttä</li><li>Jokaiselle on rooli</li><li>Kunnia kuuluu tekijälle</li><li>“Ei toiminut” on arvokas tieto</li><li>Kevyt ote, vakava asia</li><li>Näytä myös, miten tarkistit</li><li>Jakaminen on aina turvallista</li></ol></section></div></div>';
   }
 
@@ -1132,7 +1211,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<div><h3 class="eyebrow" style="margin-bottom:8px">Prompti</h3><div class="prompt" id="promptText">' + esc(t.prompti) + '<button class="btn btn-blue btn-small copy" type="button" data-copy>Kopioi prompti</button></div></div>' +
       rate +
       (ch.length > 1 ? '<div class="box"><h3>Versiohistoria</h3><ol class="chain">' + ch.map((v, i) => '<li class="' + (v.id === t.id ? "cur" : "") + '"><span class="node">' + (i + 1) + '</span><div><button type="button" data-open="' + v.id + '">' + esc(v.title) + "</button><small>" + (v.mine ? "Sinä" : esc(v.author.name)) + " · " + (i === 0 ? "alkuperäinen" : esc(v.change)) + "</small></div></li>").join("") + "</ol></div>" : "") +
-      (t.notes.length ? '<div class="box"><h3>Kokeilijoiden huomiot</h3><ul class="notes">' + t.notes.map((n) => "<li>" + esc(n.t) + "<small>" + (n.by ? esc(n.by) + " · " : "") + days(n.d) + "</small></li>").join("") + "</ul></div>" : "") +
+      (t.notes.length ? '<div class="box"><h3>Kokeilijoiden huomiot</h3><ul class="notes">' + t.notes.map((n, i) => noteItem(t, n, i)).join("") + "</ul></div>" : "") +
+      thanksRow(t) +
       '<div class="row"><button class="btn btn-ghost" type="button" data-improve="' + t.id + '">Paranna vinkkiä</button><span class="muted" style="font-size:13px">Sinulle +8 p, alkuperäiselle tekijälle +5 p</span></div>' +
       "</div>";
     openModal(html, t.title);
@@ -1200,12 +1280,28 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const t = tip(id); if (!t || S.me.tried[id]) return;
     const first = stats(t).n === 0;
     t.r[rating]++; t.s++; t.last = 0; S.me.tried[id] = rating; S.me.trials++;
-    if (note && note.trim()) t.notes.unshift({ t: note.trim(), d: 0, by: named ? "Sinä" : "" });
+    const myNote = note && note.trim() ? { t: note.trim(), d: 0, by: named ? "Sinä" : "", own: true } : null;
+    if (myNote) t.notes.unshift(myNote);
     let p = 3, lbl = "Kokeilit vinkkiä ja annoit arvion";
     if (first) { p += 3; lbl += ", ensimmäisenä"; }
     if (note && note.trim().length >= 20) { p += 2; lbl += " ja kirjallisen palautteen"; }
     if (!t.mine && teamOf(t.author.name) === MY_TEAM) S.me.ownTeamPts = (S.me.ownTeamPts || 0) + p;
     award(p, lbl);
+    feedAdd({ type: "try", who: "me", owner: t.mine ? "me" : t.author.name, title: t.title });
+    // Continuing credit: trying an improved version gives the chain's original author +1.
+    const r = root(t);
+    if (r !== t) { if (r.mine) award(1, "Parannettua versiota vinkistäsi kokeiltiin"); else setTimeout(() => toast(esc(short(r.author.name)) + " sai +1 alkuperäisenä tekijänä"), 900); }
+    // Demo: the sharer's reactions arrive after a moment (helpful comment +2, thanks for every other trial).
+    if (myNote && !t.mine) setTimeout(() => {
+      if (myNote.helpful || !t.notes.includes(myNote)) return;
+      myNote.helpful = true;
+      S.me.notifs.unshift({ t: "Jakaja merkitsi kommenttisi hyödylliseksi vinkissä “" + t.title + "”.", d: 0 });
+      award(2, "Kommenttisi merkittiin hyödylliseksi"); save(); render();
+    }, 2600);
+    if (!t.mine && S.me.trials % 2 === 0) setTimeout(() => {
+      S.me.notifs.unshift({ t: "Jakaja kiitti kokeiluasi vinkissä “" + t.title + "”.", d: 0 });
+      toast("Jakaja kiitti kokeiluasi: “" + esc(t.title) + "”"); save(); render();
+    }, 4200);
     save(); openTip(id); render();
   }
   function publish(f) {
@@ -1213,11 +1309,17 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const id = "u" + Date.now();
     const t = { id, mine: true, title: f.title, hyoty: f.hyoty, cat: f.cat, tool: f.tool, tehtava: f.tehtava || "–", miten: draft.miten, prompti: draft.prompti, tarkistin: draft.tarkistin, huomio: "", author: ME, days: 0, r: { hyvin: 0, osittain: 0, ei: 0, tark: 0 }, s: 0, notes: [], parent: base ? base.id : null, change: draft.change, old: "" };
     S.tips.push(t);
+    feedAdd(base ? { type: "improve", who: "me", owner: base.mine ? "me" : base.author.name, title: base.title } : { type: "share", who: "me", title: t.title });
     if (base) {
       award(8, "Paransit vinkkiä");
       setTimeout(() => toast(esc(base.mine ? "Sinä" : short(base.author.name)) + " sai +5 alkuperäisenä tekijänä"), 500);
     } else {
       award(5 + (draft.tarkistin ? 1 : 0), draft.tarkistin ? "Jaoit vinkin ja kerroit, miten tarkistit" : "Jaoit vinkin");
+    }
+    // First shared tip: one-time mark and +5 (state is kept, so it can't repeat).
+    if (S.me.firstTip === false) {
+      S.me.firstTip = true;
+      setTimeout(() => { award(5, "Ensimmäinen vinkkisi on kierrossa"); toast(FIRST_ICON.replace("<svg", '<svg width="22" height="22"') + "<span><b>Ensimmäinen vinkkisi on nyt kierrossa!</b> Kiitos, että jaoit osaamistasi. Sait Ensimmäinen vinkki -merkin.</span>", 6000); save(); render(); }, 700);
     }
     if (draft.question) {
       S.questions = S.questions.filter((x) => x.id !== draft.question);
@@ -1244,12 +1346,19 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       }
       const p = add * 2 + hy * 3 + os; S.me.season += p; S.me.alltime += p; total += p;
       S.me.ledger.unshift({ t: "Kokeilut vinkkiisi “" + t.title + "”", p, d: 0 });
+      // Continuing credit: trials of an improved version of your own tip give +1 each.
+      if (t.parent && root(t).mine && root(t) !== t) { S.me.season += add; S.me.alltime += add; total += add; S.me.ledger.unshift({ t: "Parannettua versiota vinkistäsi kokeiltiin", p: add, d: 0 }); }
       const after = stats(t).n;
       [[5, 5], [10, 10], [25, 20]].forEach(([lim, b]) => { if (before < lim && after >= lim) { S.me.season += b; S.me.alltime += b; total += b; S.me.ledger.unshift({ t: "Vinkkisi ylitti " + lim + " kokeilua", p: b, d: 0 }); } });
       const cm = Math.random() < 0.8 ? 1 : 0;
       if (cm) t.notes.unshift({ t: lines[Math.floor(Math.random() * lines.length)], d: 0 });
       S.me.notifs.unshift({ t: "Vinkkiäsi “" + t.title + "” kokeili tällä viikolla " + add + " kollegaa" + (cm ? ". " + names[Math.floor(Math.random() * names.length)] + " kertoi, mitä muuttaisi." : "."), d: 0 });
       const st = status(t); if (st && st.k === "todettu" && before < 5) S.me.notifs.unshift({ t: "Vinkkisi “" + t.title + "” sai Todettu toimivaksi -statuksen.", d: 0 });
+    });
+    // Colleagues' improved versions of your tips: +1 per trial for you as the original author.
+    S.tips.filter((x) => !x.mine && x.parent && root(x).mine).forEach((x) => {
+      const add = 1 + Math.floor(Math.random() * 3); x.r.hyvin += add; x.s += add; x.last = 0;
+      S.me.season += add; S.me.alltime += add; total += add; S.me.ledger.unshift({ t: "Parannettua versiota vinkistäsi kokeiltiin", p: add, d: 0 });
     });
     toast("Viikon aikana kollegat kokeilivat vinkkejäsi: <b>+" + total + "</b>");
     save(); render();
@@ -1280,12 +1389,23 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
 
   document.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-lb],[data-try],[data-report],[data-open],[data-close],[data-cat],[data-improve],[data-answer],[data-sugg],[data-post],[data-copy],#tickBtn,#shareBtn,#heroShare,#heroTry,#skinBtn,#resetBtn,#simBtn,#fillEx,#backBtn,#ov");
+    const el = e.target.closest("[data-lb],[data-try],[data-report],[data-helpful],[data-thank],[data-open],[data-close],[data-cat],[data-improve],[data-answer],[data-sugg],[data-post],[data-copy],#tickBtn,#shareBtn,#heroShare,#heroTry,#skinBtn,#resetBtn,#simBtn,#fillEx,#backBtn,#ov");
     if (!el) return;
     if (el.id === "ov") { if (e.target === el) closeModal(); return; }
     if (el.dataset.lb) { lbTab = el.dataset.lb; render(); const b = document.querySelector('[data-lb="' + lbTab + '"]'); if (b) b.focus(); return; }
     if (el.dataset.open) { openTip(el.dataset.open); return; }
     if (el.dataset.try) { tryTip(el.dataset.try); return; }
+    if (el.dataset.helpful) {
+      const [tid, i] = el.dataset.helpful.split("|"); const t = tip(tid); const n = t && t.notes[+i];
+      if (!n || n.helpful || !t.mine) return;
+      n.helpful = true; save(); toast("Merkitsit kommentin hyödylliseksi. Kommentoija saa +2 pistettä.");
+      if ($("#ov")) openTip(tid); render(); return;
+    }
+    if (el.dataset.thank) {
+      const t = tip(el.dataset.thank); if (!t || !t.mine) return;
+      t.thankedN = stats(t).n; save(); toast("Kiitos lähetetty vinkin “" + esc(t.title) + "” kokeilijoille.");
+      if ($("#ov")) openTip(t.id); render(); return;
+    }
     if (el.dataset.report) { S.me.reported = S.me.reported || {}; S.me.reported[el.dataset.report] = true; save(); openTip(el.dataset.report); toast("Kiitos ilmoituksesta! Jos useampi kollega ilmoittaa saman, vinkki merkitään vanhentuneeksi."); return; }
     if (el.id === "heroTry") { const t = heroTryTip(); if (t) tryTip(t.id); return; }
     if ("close" in el.dataset) { closeModal(); return; }
