@@ -52,6 +52,14 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 - Arviot ovat nimettömiä; jakaja näkee vain koosteet. Uudet kentät **eivät näy feedissä**.
 
 ## Johdon näkymä
+- Otsikko "Tekoälyn johtaminen verotuksen asiantuntijatyössä" (ei haaste-riviä alle). Yläreunassa: "Data syntyy käytön sivutuotteena. Vain koottua tietoa – alle 5 hengen ryhmät piilotetaan." + "Esimerkkidataa". Alareunassa: "Hiljainen tieto liikkeelle – ja sen leviäminen näkyväksi."
+- Osiot tässä järjestyksessä, selite muodossa **data → hyöty** (data vaimeana, hyöty korostettuna, nuoli piilotettu ruudunlukijalta):
+  1. Miten osaaminen leviää – Kokeilut yksiköittäin → missä leviäminen pysähtyy (osallistumisaste kuukausittain + leviäminen; korostus kun alle 75 % yksikön vinkeistä on kokeiltu muissa yksiköissä)
+  2. Missä tekoäly auttaa – Statukset alarooleittain → kohdenna lisenssit ja koulutus
+  3. Hyöty näkyviin – Aikasäästöarviot → perustelu lisensseille
+  4. Mikä ei toimi – Arvioiden syyt → mitä korjata ensin (alarooleittain vain yleisin syy)
+  5. Riskit hallinnassa – Tarkistustavat alarooleittain → missä varmistus on heikkoa
+  6. Mitä vielä puuttuu – Vastaamattomat kysymykset → kehityslista agenteille
 - Vain koottua tietoa: **ei yksilötason tietoja, nimiä, pisteitä eikä rankingeja**.
 - **Vähimmäisryhmäsääntö (`MIN_GROUP = 5`):** jos solun tai rivin taustalla on alle 5 eri henkilöä, näytetään "piilotettu (< 5)". Sääntö lasketaan aina eri henkilöistä, ei arvioiden määrästä.
 - Merkitty "Esimerkkidataa". Osallistumisaste kuukausittain (`PART_HISTORY`) ja avoimien kysymysten kooste (`QLOG`) ovat kuvitteellista esimerkkidataa.
