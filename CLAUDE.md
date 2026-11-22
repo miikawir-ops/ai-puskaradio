@@ -19,7 +19,8 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 - Workflow julkaisee vain `index.html`:n ja `fonts/`-kansion; muut repon tiedostot (CLAUDE.md, README) eivät näy sivustolla.
 - **Käyttöliittymä suomeksi.**
 - **Tila vain katsojan selaimessa**: `localStorage`, jokainen luku ja kirjoitus `try/catch`-suojattuna. Sivun pitää toimia myös, kun tallennus on estetty. Ei palvelinta, ei analytiikkaa, ei evästeitä.
-- Tallennusavain `ai-puskaradio-demo-v1`. Jos tallennetun tilan rakenne muuttuu yhteensopimattomasti, nosta versionumeroa.
+- Tallennusavain `ai-puskaradio-demo-v2` (ilmevalinta erikseen avaimella `ai-puskaradio-demo-v1-skin`). Jos tallennetun tilan rakenne muuttuu yhteensopimattomasti, nosta versionumeroa.
+- Esimerkkidata on **deterministinen** (kiinteä siemen), jotta näkymät ja testit ovat toistettavia. Seed-vinkkien kokeilukohtaiset tietueet (`evals`) ovat nimettömiä ja generoidaan vinkin arviomääristä.
 
 ## Ilme
 - Oletuksena **Neon 86**: 80-luvun Miami-estetiikka, **25.5 FM** -radioteema (neonvalot, auringonlasku, palmut).
@@ -43,6 +44,17 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 - **Kiitos kokeilijoille:** ei pisteitä, menee kaikille kokeilijoille paljastamatta heitä jakajalle.
 - **Ensimmäinen vinkki:** kertaluonteinen merkki ja +5, ei koskaan toista kertaa.
 - **Jatkuva kunnia:** parannetun version kokeilusta ketjun alkuperäinen tekijä saa +1.
+
+## Kentät: alarooli, aikasäästö, syy
+- **Alarooli** (organisaation nimitys työtehtävälle; käytä UI:ssa sanaa "alarooli"): pakollinen vinkkiä jaettaessa, yksi tai useampi. Lista on **yhdessä vakiossa `ALAROOLIT`** (demossa "Alarooli 1" … "Alarooli 8"); oikeat nimet vaihdetaan vain siihen. Vinkit tallentavat avaimet (`a1`…), eivät nimiä. Ei keksittyjä alaroolinimiä.
+- **Aikasäästö** (kokeilun arvio, vapaaehtoinen, per kerta): Ei säästöä / Alle 15 min / 15–60 min / 1–4 h / Yli 4 h. Koosteissa vaihteluvälin keskiarvo (0 / 7,5 min / 37,5 min / 2,5 h / 5 h), ja tulos esitetään **aina suuruusluokkana**, ei tarkkana lukuna.
+- **Syy** (kokeilun arvio, vapaaehtoinen, vain arvioille "toimi osittain" ja "ei toiminut"): Työkalun rajoite / Ohjeistus puuttui / Tietoturva- tai salassapitosyy / Muu.
+- Arviot ovat nimettömiä; jakaja näkee vain koosteet. Uudet kentät **eivät näy feedissä**.
+
+## Johdon näkymä
+- Vain koottua tietoa: **ei yksilötason tietoja, nimiä, pisteitä eikä rankingeja**.
+- **Vähimmäisryhmäsääntö (`MIN_GROUP = 5`):** jos solun tai rivin taustalla on alle 5 eri henkilöä, näytetään "piilotettu (< 5)". Sääntö lasketaan aina eri henkilöistä, ei arvioiden määrästä.
+- Merkitty "Esimerkkidataa". Osallistumisaste kuukausittain (`PART_HISTORY`) ja avoimien kysymysten kooste (`QLOG`) ovat kuvitteellista esimerkkidataa.
 
 ## Tasonimet
 Rookie → Tekijä → Velho → Mestari → Final boss
