@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKIN_KEY = "ai-puskaradio-demo-v1-skin";
-export const VIEWS = ["vinkit", "tulostaulu", "kysy", "oma", "miten"];
+export const VIEWS = ["vinkit", "tulostaulu", "kysy", "oma", "miten", "johto"];
 export const VIEWPORTS = {
   desktop: { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false },
   mobile: { width: 390, height: 844, deviceScaleFactor: 1, mobile: true },

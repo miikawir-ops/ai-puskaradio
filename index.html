@@ -59,6 +59,7 @@
   --intro-bg: linear-gradient(120deg, #E3F0F8 0%, #F6EAF0 55%, #FCE6DC 100%);
   --band: #E6EFF6;
   --cat-mix: 14%;
+  --gap-bg: #FFF2D2;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -83,9 +84,9 @@
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --intro-bg: linear-gradient(120deg, #163449 0%, #2A2440 55%, #3A2316 100%); --band: #10202D; --cat-mix: 24%; }
+  :root:not([data-theme="light"]) { --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --intro-bg: linear-gradient(120deg, #163449 0%, #2A2440 55%, #3A2316 100%); --band: #10202D; --cat-mix: 24%; --gap-bg: #3A2E12; }
 }
-:root[data-theme="dark"] { --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --intro-bg: linear-gradient(120deg, #163449 0%, #2A2440 55%, #3A2316 100%); --band: #10202D; --cat-mix: 24%; }
+:root[data-theme="dark"] { --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --intro-bg: linear-gradient(120deg, #163449 0%, #2A2440 55%, #3A2316 100%); --band: #10202D; --cat-mix: 24%; --gap-bg: #3A2E12; }
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
@@ -109,6 +110,7 @@ nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
 nav.tabs a { text-decoration: none; color: var(--ink-2); font-weight: 600; padding: 8px 12px; border-radius: 999px; }
 nav.tabs a:hover { background: var(--surface-2); color: var(--ink); }
 nav.tabs a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
+@media (min-width: 641px) { .top .wrap { gap: 12px; } nav.tabs { gap: 0; } nav.tabs a { padding: 8px 9px; font-size: 14.5px; } }
 .me-pill { display: flex; align-items: center; gap: 10px; background: var(--surface-2); border: 0; border-radius: 999px; padding: 5px 6px 5px 12px; text-decoration: none; color: var(--ink); font-size: 13px; }
 .me-pill .pts { font-family: var(--f-display); font-weight: 800; font-variant-numeric: tabular-nums; }
 .me-pill .lvl { background: var(--surface); padding: 3px 10px; border-radius: 999px; font-weight: 600; }
@@ -253,6 +255,37 @@ main { padding-block: 24px 64px; }
 .kv dd { margin: 0; min-width: 0; }
 .linkbtn { background: none; border: 0; padding: 0; margin-top: 12px; color: var(--accent); font-weight: 700; font-size: 13.5px; text-decoration: underline; }
 .linkbtn.sm { margin-top: 4px; font-size: 12.5px; }
+.roles { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+.role-filter select { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.err { margin: 6px 0 0; color: var(--signal); font-weight: 700; font-size: 13.5px; }
+.checks { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 12px; }
+@media (max-width: 520px) { .checks { grid-template-columns: minmax(0,1fr); } }
+/* Leadership view: aggregated data only; groups under 5 people are hidden. */
+.ex-badge { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-size: 11.5px; font-weight: 700; color: var(--ink-2); vertical-align: 2px; letter-spacing: 0; text-transform: none; }
+.notice { background: var(--accent-soft); border-radius: 10px; padding: 10px 14px; font-weight: 600; margin-bottom: 18px; }
+.lead-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
+.lead-grid .panel { min-width: 0; }
+.jt { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.jt th, .jt td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.jt thead th { font-size: 11.5px; }
+.jt td.num { font-variant-numeric: tabular-nums; }
+.jt .gap { background: var(--gap-bg); color: var(--ink); font-weight: 700; }
+.hid { font-style: italic; color: var(--ink-2); font-size: 12.5px; white-space: nowrap; }
+.bar { display: flex; align-items: center; gap: 8px; }
+.bar > span:first-child { flex: 1; min-width: 40px; height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.bar b { font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: right; }
+.big-est { font-family: var(--f-display); font-size: 26px; font-weight: 800; margin: 4px 0; }
+body.neon .big-est { font-weight: 400; color: var(--cyan); }
+.topics { margin: 10px 0 0; padding-left: 18px; font-size: 13.5px; }
+@media (max-width: 640px) {
+  .jt thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .jt tr { display: block; border-bottom: 1px solid var(--line); padding: 6px 0; }
+  .jt th[scope=row] { display: block; border: 0; padding: 4px 0; }
+  .jt td { display: flex; justify-content: space-between; gap: 12px; border: 0; padding: 3px 0; }
+  .jt td::before { content: attr(data-l); color: var(--ink-2); font-weight: 600; }
+  .jt td .bar { flex: 0 1 60%; }
+}
 .helpful { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--ok); }
 .helpful svg, .mark.first svg { width: 13px; height: 13px; }
 .mark.first { color: var(--accent); }
@@ -382,7 +415,7 @@ body.neon {
   --shadow: 0 6px 22px rgba(5,2,20,.55); --overlay: rgba(6,2,18,.72);
   --f-display: "Righteous", "Bricolage Grotesque", system-ui, sans-serif;
   --pink: #FF4FA3; --orange: #FF8A3D; --cyan: #2EE6F2;
-  --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --badge-fill: #1D1043;
+  --lv0: #2EE6F2; --lv1: #5CF2A0; --lv2: #B48CFF; --lv3: #FF4FA3; --lv4: #FFC857; --badge-fill: #1D1043; --gap-bg: rgba(255,209,102,.28);
   color-scheme: dark;
   background:
     radial-gradient(900px 520px at 85% -8%, rgba(255,79,163,.20), transparent 70%),
@@ -518,6 +551,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       <a href="#kysy" data-view="kysy">Kysy Puskaradiolta</a>
       <a href="#oma" data-view="oma">Oma Puskaradio</a>
       <a href="#miten" data-view="miten">Miten toimii</a>
+      <a href="#johto" data-view="johto">Johdon näkymä</a>
     </nav>
     <a class="me-pill" href="#oma" id="mePill"></a>
     <button class="btn btn-primary" id="shareBtn" type="button">+ Jaa vinkki</button>
@@ -538,7 +572,9 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
 <script>
 (function () {
   "use strict";
-  const KEY = "ai-puskaradio-demo-v1";
+  // v2: tips gained alaroolit and per-trial records. The skin choice keeps its v1 key.
+  const KEY = "ai-puskaradio-demo-v2";
+  const SKIN_KEY = "ai-puskaradio-demo-v1-skin";
   const CATS = {
     kirj: { name: "Kirjoittaminen", c: "var(--c-kirj)" },
     tiiv: { name: "Tiivistäminen ja analyysi", c: "var(--c-tiiv)" },
@@ -624,12 +660,51 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     { name: "Kasettikopio", unit: "Oma yksikkö", size: 4, base: 60 }
   ];
   const RATINGS = { hyvin: "Toimi hyvin", osittain: "Toimi osittain", ei: "Ei toiminut", tark: "Vaati paljon tarkistamista" };
+  // Alaroolit (the organisation's name for work roles). The ONE place to change their names.
+  const ALAROOLIT = { a1: "Alarooli 1", a2: "Alarooli 2", a3: "Alarooli 3", a4: "Alarooli 4", a5: "Alarooli 5", a6: "Alarooli 6", a7: "Alarooli 7", a8: "Alarooli 8" };
+  const roleNames = (ids) => (ids || []).filter((k) => ALAROOLIT[k]).map((k) => ALAROOLIT[k]);
+  // Time saved per use; aggregates use the range midpoint (minutes) and are shown only as an order of magnitude.
+  const SAVE = { none: { label: "Ei säästöä", min: 0 }, lt15: { label: "Alle 15 min", min: 7.5 }, m15: { label: "15–60 min", min: 37.5 }, h1: { label: "1–4 h", min: 150 }, gt4: { label: "Yli 4 h", min: 300 } };
+  // Reason, asked only for "toimi osittain" / "ei toiminut".
+  const SYY = { tyokalu: "Työkalun rajoite", ohjeistus: "Ohjeistus puuttui", tietoturva: "Tietoturva- tai salassapitosyy", muu: "Muu" };
+  const SYY_RATINGS = ["osittain", "ei"];
+  const MIN_GROUP = 5; // leadership view hides any cell/row backed by fewer distinct people
+  // Fictional staff pool for the anonymous per-trial records (no names, never shown individually).
+  const UNITS = ["Yksikkö 1", "Yksikkö 2", "Yksikkö 3", "Yksikkö 4", "Yksikkö 5", "Yksikkö 6", "Oma yksikkö"];
+  const STAFF = [14, 16, 12, 18, 12, 20, 10];
+  // Monthly participation %, oldest first; the last value is the current month (matches PART).
+  const PART_HISTORY = { "Yksikkö 1": [41, 55, 66, 78], "Yksikkö 2": [38, 50, 62, 71], "Yksikkö 3": [30, 41, 53, 62], "Yksikkö 4": [35, 47, 58, 66], "Yksikkö 5": [52, 64, 75, 83], "Yksikkö 6": [22, 31, 44, 54], "Oma yksikkö": [40, 52, 61, 69] };
+  // Open questions without an accepted answer (anonymous aggregate example data; n = distinct askers).
+  const QLOG = [
+    { role: "a5", topic: "Excel-taulukoiden vertailu", n: 5 }, { role: "a5", topic: "PDF-tiivistelmä sivunumeroin", n: 3 },
+    { role: "a7", topic: "Säädösmuutosten jäsentely", n: 7 }, { role: "a8", topic: "Päätösluonnosten tarkistus", n: 5 },
+    { role: "a8", topic: "Asiakaskirjeiden vakiotekstit", n: 4 }, { role: "a2", topic: "Kokousten esityslistat", n: 2 },
+    { role: "a4", topic: "Selkokieliset ohjeet", n: 6 }, { role: "a6", topic: "Englanninkieliset raportit", n: 3 }
+  ];
+  // Seed alaroolit per tip: a1 and a3 strong, a5 and a7 only "Kokeilussa" tips, a8 none.
+  const SEED_ROLES = { t1: ["a1", "a2"], t2: ["a3"], t2b: ["a3"], t2c: ["a3", "a1"], t3: ["a1", "a2"], t4: ["a4"], t5: ["a3", "a6"], t6: ["a2"], t7: ["a1", "a4"], t8: ["a5"], t9: ["a6"], t10: ["a6", "a7"], t11: ["a4"], t12: ["a2"], t13: ["a5"], t14: ["a5", "a7"], t15: ["a7"], m1: ["a1"] };
+  const SYY_BIAS = { t4: "tietoturva", t10: "ohjeistus", t11: "tyokalu", t7: "ohjeistus" };
+  // Small deterministic PRNG so the example data is the same on every load.
+  function rng(str) { let h = 2166136261; for (const c of str) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return () => { h += 0x6D2B79F5; let x = h; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+  function pickW(rnd, w) { let x = rnd() * w.reduce((a, b) => a + b[1], 0); for (const [k, v] of w) { if ((x -= v) < 0) return k; } return w[w.length - 1][0]; }
+  // Anonymous per-trial records generated from a seed tip's rating counts.
+  function seedEvals(t) {
+    const rnd = rng(t.id), used = new Set(), out = [], home = UNITS.indexOf(t.author.unit), maxM = Math.min(3, Math.floor(t.days / 30));
+    const saveW = { hyvin: [["m15", 4], ["h1", 3], ["lt15", 2], ["gt4", 1], [null, 3]], osittain: [["lt15", 4], ["m15", 3], ["none", 1], [null, 3]], tark: [["lt15", 3], ["none", 2], ["m15", 1], [null, 3]], ei: [["none", 4], [null, 3]] };
+    const syyW = [["tyokalu", 4], ["ohjeistus", 3], ["tietoturva", 2], ["muu", 1], [null, 3]].map(([k, v]) => [k, k && k === SYY_BIAS[t.id] ? v + 5 : v]);
+    Object.keys(t.r).forEach((r) => { for (let i = 0; i < t.r[r]; i++) {
+      let p, u, tries = 0;
+      do { u = rnd() < 0.35 && home >= 0 ? home : Math.floor(rnd() * UNITS.length); p = u + "-" + Math.floor(rnd() * STAFF[u]); } while (used.has(p) && ++tries < 50);
+      used.add(p);
+      out.push({ p, u: UNITS[u], r, save: pickW(rnd, saveW[r]), syy: SYY_RATINGS.includes(r) ? pickW(rnd, syyW) : null, m: pickW(rnd, [[0, 4], [1, 3], [2, 2], [3, 1]].filter(([m]) => m <= maxM)) });
+    } });
+    return out;
+  }
   const ME = { name: "Sinä", unit: "Oma yksikkö" };
 
   function seed() {
     const t = (o) => Object.assign({ r: { hyvin: 0, osittain: 0, ei: 0, tark: 0 }, s: 0, notes: [], parent: null, change: "", tarkistin: "", huomio: "", old: "" }, o);
-    return {
-      tips: [
+    const tips = [
         t({ id: "t1", title: "Sähköpostiketjun avoimet päätökset listaksi", cat: "kok", tool: "Outlook",
           hyoty: "Näet pitkästä ketjusta minuutissa, mitä on päätetty ja mikä on vielä auki.",
           tehtava: "Pitkät sähköpostiketjut, joihin tulee mukaan kesken keskustelun.",
@@ -754,10 +829,13 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
           tarkistin: "Kävin muutoslistan läpi ennen hyväksymistä.",
           author: ME, days: 16, r: { hyvin: 5, osittain: 1, ei: 1, tark: 0 }, s: 7,
           notes: [{ t: "Muutoslista on paras osa, sen avulla tarkistus on nopeaa.", d: 5 }, { t: "Minulla Copilot muutti yhden termin, joten muutokset kannattaa tosiaan katsoa.", d: 8 }] })
-      ],
+      ];
+    tips.forEach((x) => { x.roles = SEED_ROLES[x.id] || []; x.evals = seedEvals(x); });
+    return {
+      tips,
       questions: [
-        { id: "q1", text: "Onko kenelläkään tapaa verrata kahta Excel-taulukkoa ja löytää poikkeavat rivit?", by: "Mikko Salo", days: 2 },
-        { id: "q2", text: "Miten saan pitkästä PDF-raportista tiivistelmän niin, että sivunumerot säilyvät?", by: "Jenni Mäkelä", days: 4 }
+        { id: "q1", text: "Onko kenelläkään tapaa verrata kahta Excel-taulukkoa ja löytää poikkeavat rivit?", by: "Mikko Salo", days: 2, role: "a5", topic: "Excel-taulukoiden vertailu" },
+        { id: "q2", text: "Miten saan pitkästä PDF-raportista tiivistelmän niin, että sivunumerot säilyvät?", by: "Jenni Mäkelä", days: 4, role: "a5", topic: "PDF-tiivistelmä sivunumeroin" }
       ],
       brave: [
         { name: "Laura Virtanen", n: 14 }, { name: "Pekka Nieminen", n: 11 }, { name: "Jenni Mäkelä", n: 9 }, { name: "Mikko Salo", n: 7 }
@@ -854,6 +932,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
         (extra === "first" ? '<span class="bonus" role="img" aria-label="Ensimmäinen kokeilija saa 3 lisäpistettä">+3 p</span>' : "") + "</span></div>" +
       '<h3><button class="card-link" type="button" data-open="' + t.id + '">' + esc(t.title) + "</button></h3>" +
       '<p class="hyoty">' + esc(t.hyoty) + "</p>" +
+      (t.roles && t.roles.length ? '<p class="roles"><span class="sr">Alarooli: </span>' + esc(roleNames(t.roles).join(" · ")) + "</p>" : "") +
       '<div class="card-foot">' + (statusChip(t) || "<span></span>") + signal(t) + "</div>" +
       '<div class="by">' + badge(t.mine ? level(S.me.alltime).i : personLevel(t.author.name), 18, false) + "<span>" + (t.mine ? "Sinun vinkkisi" : esc(short(t.author.name)) + " · " + esc(t.author.unit)) + " · " + days(t.days) + "</span></div>" +
       tryAction(t) +
@@ -882,7 +961,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   }
 
   /* ---------- views ---------- */
-  let filterCat = "all", query = "";
+  let filterCat = "all", query = "", filterRole = "";
   function seasonInfo() {
     const now = new Date(); const months = ["Tammikuun", "Helmikuun", "Maaliskuun", "Huhtikuun", "Toukokuun", "Kesäkuun", "Heinäkuun", "Elokuun", "Syyskuun", "Lokakuun", "Marraskuun", "Joulukuun"];
     const end = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
@@ -898,11 +977,11 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   const heroTryTip = () => boardFirst().concat(boardTop()).find((t) => !t.mine && !S.me.tried[t.id]) || null;
   function viewBoard() {
     const all = latest(S.tips);
-    const filtered = all.filter((t) => (filterCat === "all" || t.cat === filterCat) && (!query || matchScore(t, tokens(query)) > 0));
+    const filtered = all.filter((t) => (filterCat === "all" || t.cat === filterCat) && (!filterRole || (t.roles || []).includes(filterRole)) && (!query || matchScore(t, tokens(query)) > 0));
     const chips = '<button class="chip" type="button" data-cat="all" aria-pressed="' + (filterCat === "all") + '">Kaikki</button>' +
       Object.keys(CATS).map((k) => '<button class="chip" type="button" data-cat="' + k + '" style="--cc:' + CATS[k].c + '" aria-pressed="' + (filterCat === k) + '"><span class="dot" style="background:' + CATS[k].c + '"></span>' + CATS[k].name + "</button>").join("");
     let body = "";
-    if (filterCat !== "all" || query) {
+    if (filterCat !== "all" || query || filterRole) {
       const list = filtered.sort((a, b) => score(b) - score(a));
       body = sec("Hakutulokset", list.length + " vinkkiä. Hyödyllisiksi koetut ensin.", list.length ? '<div class="grid">' + list.map((t) => card(t)).join("") + "</div>" : '<div class="empty">Vinkkiä ei löytynyt. Kokeile <a href="#kysy">Kysy Puskaradiolta</a> -toimintoa tai jaa oma vinkki.</div>');
     } else {
@@ -922,7 +1001,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const si = seasonInfo();
     return (skin === "neon" ? heroHTML() : introHTML()) + '<div class="view-head"><div><span class="eyebrow">' + esc(si.name) + " · " + si.left + " päivää jäljellä" + (skin === "neon" ? " · Kauden teema: Neon 86" : "") + '</span><h1>Kierrossa olevat vinkit</h1></div></div>' +
       '<div class="board"><div>' +
-      '<div class="filters"><label class="search"><span class="sr">Hae vinkkejä</span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Hae vinkkejä, esim. muistio tai Excel" value="' + esc(query) + '"></label>' + chips + "</div>" +
+      '<div class="filters"><label class="search"><span class="sr">Hae vinkkejä</span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Hae vinkkejä, esim. muistio tai Excel" value="' + esc(query) + '"></label>' +
+      '<label class="role-filter"><span class="sr">Suodata alaroolin mukaan</span><select id="roleSel"><option value="">Kaikki alaroolit</option>' + Object.keys(ALAROOLIT).map((k) => '<option value="' + k + '"' + (k === filterRole ? " selected" : "") + ">" + esc(ALAROOLIT[k]) + "</option>").join("") + "</select></label>" + chips + "</div>" +
       body + "</div>" + rail() + "</div>";
   }
   /* ---------- Vinkit page actions: hero (neon) or intro row (plain), one button builder ---------- */
@@ -1137,6 +1217,79 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       "</section>";
   }
 
+  /* ---------- Johdon näkymä: aggregates only, groups under MIN_GROUP people hidden ---------- */
+  const HID = '<span class="hid">piilotettu (&lt; 5)</span>';
+  const evalsOf = (tips) => tips.flatMap((t) => t.evals || []);
+  const people = (evs, tips) => { const p = new Set(evs.map((e) => e.p)); (tips || []).forEach((t) => p.add(t.mine ? "me" : "n:" + t.author.name)); return p.size; };
+  const pct = (a, b) => b ? Math.round((a / b) * 100) : 0;
+  const bar = (v) => '<span class="bar"><span><i style="width:' + v + '%"></i></span><b>' + v + " %</b></span>";
+  function magnitude(h) { return h < 1 ? "alle tunti" : h < 5 ? "1–5 h" : h < 10 ? "5–10 h" : h < 25 ? "10–25 h" : h < 50 ? "25–50 h" : h < 100 ? "50–100 h" : h < 250 ? "100–250 h" : "yli 250 h"; }
+  function monthLabels() { const n = ["tammi", "helmi", "maalis", "huhti", "touko", "kesä", "heinä", "elo", "syys", "loka", "marras", "joulu"], m = new Date().getMonth(); return [3, 2, 1, 0].map((k) => n[(m - k + 12) % 12]); }
+  const tipsOfRole = (k) => latest(S.tips).filter((t) => !t.old && (t.roles || []).includes(k));
+  const panelL = (h, sub, inner, cls) => '<section class="panel' + (cls ? " " + cls : "") + '"><h2>' + h + '</h2><p class="sub">' + sub + "</p>" + inner + "</section>";
+  const th = (cols) => "<thead><tr>" + cols.map((c, i) => '<th scope="col">' + c + "</th>").join("") + "</tr></thead>";
+  const td = (label, html, cls) => '<td data-l="' + label + '"' + (cls ? ' class="' + cls + '"' : "") + ">" + html + "</td>";
+  function viewLead() {
+    const roles = Object.keys(ALAROOLIT);
+    // 1. Where AI helps: alarooli x status (number of tips)
+    const ST = [["todettu", "Todettu toimivaksi"], ["tietyissa", "Toimii tietyissä tilanteissa"], ["kokeile", "Kokeilussa"]];
+    const t1 = '<table class="jt">' + th(["Alarooli"].concat(ST.map((x) => x[1]), ["Ei vinkkejä"])) + "<tbody>" + roles.map((k) => {
+      const all = tipsOfRole(k);
+      return '<tr><th scope="row">' + esc(ALAROOLIT[k]) + "</th>" + ST.map(([sk, sl]) => {
+        const list = all.filter((t) => status(t).k === sk);
+        if (!list.length) return td(sl, '–<span class="sr"> ei vinkkejä</span>', sk === "todettu" ? "num gap" : "num");
+        return td(sl, people(evalsOf(list), list) < MIN_GROUP ? HID : list.length + (list.length === 1 ? " vinkki" : " vinkkiä"), "num");
+      }).join("") + td("Ei vinkkejä", all.length ? "" : "Ei vinkkejä", all.length ? "" : "gap") + "</tr>";
+    }).join("") + "</tbody></table>";
+    // 2. What doesn't work: reasons from "osittain" / "ei toiminut" ratings
+    const fails = (tips) => evalsOf(tips).filter((e) => SYY_RATINGS.includes(e.r) && e.syy);
+    const allF = fails(latest(S.tips));
+    const dist = Object.keys(SYY).map((k) => { const ev = allF.filter((e) => e.syy === k); return "<li>" + esc(SYY[k]) + (people(ev) < MIN_GROUP ? " " + HID : bar(pct(ev.length, allF.length))) + "</li>"; }).join("");
+    // Per alarooli only the most common reason, shown when that reason itself has >= MIN_GROUP people.
+    const t2 = '<table class="jt">' + th(["Alarooli", "Yleisin syy"]) + "<tbody>" + roles.map((k) => {
+      const ev = fails(tipsOfRole(k));
+      const top = Object.keys(SYY).map((sk) => ({ sk, ev: ev.filter((e) => e.syy === sk) })).sort((a, b) => b.ev.length - a.ev.length)[0];
+      const val = !ev.length ? "–" : people(top.ev) < MIN_GROUP ? HID : esc(SYY[top.sk]) + " (" + pct(top.ev.length, ev.length) + " %)";
+      return '<tr><th scope="row">' + esc(ALAROOLIT[k]) + "</th>" + td("Yleisin syy", val) + "</tr>";
+    }).join("") + "</tbody></table>";
+    // 3. What's missing: open questions without an accepted answer, by alarooli
+    const openQ = QLOG.concat(S.questions.filter((q) => q.role).map((q) => ({ role: q.role, topic: q.topic, n: 1 })));
+    const qBy = (f) => openQ.filter(f).reduce((a, q) => a + q.n, 0);
+    const t3 = '<table class="jt">' + th(["Alarooli", "Avoimia kysymyksiä"]) + "<tbody>" + roles.map((k) => { const n = qBy((q) => q.role === k); return '<tr><th scope="row">' + esc(ALAROOLIT[k]) + "</th>" + td("Avoimia kysymyksiä", !n ? "–" : n < MIN_GROUP ? HID : n, "num") + "</tr>"; }).join("") + "</tbody></table>";
+    const topics = [...new Set(openQ.map((q) => q.topic))].map((tp) => ({ tp, n: qBy((q) => q.topic === tp) })).filter((x) => x.n >= MIN_GROUP);
+    const hiddenTopics = [...new Set(openQ.map((q) => q.topic))].length - topics.length;
+    // 4. Adoption: participation by unit and month + spread of the unit's tips to other units
+    const ml = monthLabels();
+    const t4 = '<table class="jt">' + th(["Yksikkö"].concat(ml, ["Vinkkejä kokeiltu muissa yksiköissä"])) + "<tbody>" + UNITS.map((u) => {
+      const own = latest(S.tips).filter((t) => !t.old && (t.mine ? "Oma yksikkö" : t.author.unit) === u);
+      const spreadT = own.filter((t) => (t.evals || []).some((e) => e.u !== u));
+      const cross = evalsOf(own).filter((e) => e.u !== u);
+      return '<tr><th scope="row">' + esc(u === "Oma yksikkö" ? "Oma yksikkösi" : u) + "</th>" + PART_HISTORY[u].map((v, i) => td(ml[i], v + " %", "num")).join("") +
+        td("Kokeiltu muissa yksiköissä", !own.length ? "–" : people(cross, own) < MIN_GROUP ? HID : spreadT.length + " / " + own.length + " vinkistä", "num") + "</tr>";
+    }).join("") + "</tbody></table>";
+    // 5. Risks: share of trials whose tip has "Miten tarkistin?" filled, by alarooli
+    const t5 = '<table class="jt">' + th(["Alarooli", "Kokeiluista tarkistustapa kuvattu"]) + "<tbody>" + roles.map((k) => {
+      const tips = tipsOfRole(k), ev = evalsOf(tips), withT = tips.filter((t) => t.tarkistin).flatMap((t) => t.evals || []);
+      return '<tr><th scope="row">' + esc(ALAROOLIT[k]) + "</th>" + td("Tarkistustapa kuvattu", !ev.length ? "–" : people(ev) < MIN_GROUP ? HID : bar(pct(withT.length, ev.length))) + "</tr>";
+    }).join("") + "</tbody></table>";
+    // 6. Benefit: estimated hours saved this month, only as an order of magnitude
+    const month = evalsOf(latest(S.tips)).filter((e) => e.m === 0 && e.save);
+    const hours = (ev) => ev.reduce((a, e) => a + SAVE[e.save].min, 0) / 60;
+    const t6 = '<table class="jt">' + th(["Alarooli", "Arvioitu säästö / kk"]) + "<tbody>" + roles.map((k) => {
+      const ev = evalsOf(tipsOfRole(k)).filter((e) => e.m === 0 && e.save);
+      return '<tr><th scope="row">' + esc(ALAROOLIT[k]) + "</th>" + td("Arvioitu säästö / kk", !ev.length ? "–" : people(ev) < MIN_GROUP ? HID : "noin " + magnitude(hours(ev)), "num") + "</tr>";
+    }).join("") + "</tbody></table>";
+    return '<div class="view-head"><div><span class="eyebrow">Johdon näkymä<span class="ex-badge">Esimerkkidataa</span></span><h1>Tekoälyn johtaminen verotuksen asiantuntijatyössä</h1></div></div>' +
+      '<p class="notice" role="note">Vain koottua tietoa – alle 5 hengen ryhmät piilotetaan.</p>' +
+      '<div class="lead-grid">' +
+      panelL("1. Missä tekoäly auttaa", "Kohdenna lisenssit ja koulutus. Vinkkien määrä statuksittain alarooleittain; korostettu, missä toimivaksi todettua tapaa ei vielä ole.", t1, "wide") +
+      panelL("2. Mikä ei toimi", "Tiedät, mitä korjata ensin. Syyt arvioista “toimi osittain” ja “ei toiminut”.", '<ul class="notes">' + dist + "</ul>" + '<h3 class="eyebrow" style="margin:16px 0 6px">Alarooleittain</h3>' + t2, "wide") +
+      panelL("3. Mitä vielä puuttuu", "Kehityslista uusille agenteille. Avoimet kysymykset ilman hyväksyttyä vastausta.", t3 + '<h3 class="eyebrow" style="margin:16px 0 6px">Yleisimmät aiheet</h3><ul class="topics">' + topics.map((x) => "<li>" + esc(x.tp) + "</li>").join("") + "</ul>" + (hiddenTopics ? '<p class="sub" style="margin:6px 0 0">' + hiddenTopics + " aihetta piilotettu (&lt; 5 kysyjää).</p>" : "")) +
+      panelL("4. Käyttöönotto etenee", "Näet, mitkä yksiköt tarvitsevat tukea. Osallistumisaste kuukausittain ja yksikön vinkkien leviäminen.", t4, "wide") +
+      panelL("5. Riskit hallinnassa", "Näet, miten tuotokset tarkistetaan. Osuus kokeiluista, joiden vinkissä “Miten tarkistin?” on täytetty.", t5) +
+      panelL("6. Hyöty näkyviin", "Säästetty työaika lisenssien perusteeksi. Arvio kuluvalta kuukaudelta suuruusluokkana.", '<div class="big-est">noin ' + magnitude(hours(month)) + " kuukaudessa</div>" + t6 + '<p class="sub" style="margin:10px 0 0">Perustuu käyttäjien omiin arvioihin (vaihteluvälin keskiarvo per kerta).</p>', "wide") +
+      "</div>";
+  }
   function metricsPanel() {
     const all = latest(S.tips).filter((t) => !t.old);
     const tried3 = all.filter((t) => stats(t).n >= 3).length;
@@ -1195,6 +1348,8 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     else if (t.old) rate = '<div class="box"><h3>Vanhentunut menetelmä</h3><p>' + esc(t.old) + " Vinkki säilyy, jotta näet mitä on kokeiltu. Voit tehdä siitä päivitetyn version.</p></div>";
     else rate = '<form class="box form" id="rateForm" data-id="' + t.id + '"><fieldset><legend>Kokeilin tätä – miten kävi?</legend><div class="opts">' +
       Object.keys(RATINGS).map((k) => '<label class="opt"><input type="radio" name="rating" value="' + k + '" required> ' + RATINGS[k] + "</label>").join("") + "</div></fieldset>" +
+      '<div class="field"><label class="fl" for="rateSave">Paljonko aikaa säästyi? <span>(vapaaehtoinen, per kerta)</span></label><select class="inp" id="rateSave"><option value="">Ei vastausta</option>' + Object.keys(SAVE).map((k) => '<option value="' + k + '">' + SAVE[k].label + "</option>").join("") + "</select></div>" +
+      '<div class="field" id="syyField" hidden><label class="fl" for="rateSyy">Mikä oli syy? <span>(vapaaehtoinen)</span></label><select class="inp" id="rateSyy"><option value="">Ei vastausta</option>' + Object.keys(SYY).map((k) => '<option value="' + k + '">' + SYY[k] + "</option>").join("") + "</select></div>" +
       '<div class="field"><label class="fl" for="rateNote">Mikä vaikutti lopputulokseen? <span>(vapaaehtoinen, +2 p kun vähintään 20 merkkiä)</span></label><textarea class="inp" id="rateNote" placeholder="Esim. toimi, kun rajasin tehtävän yhteen lukuun"></textarea></div>' +
       '<label class="confirm"><input type="checkbox" id="rateName"> Näytä nimeni kommentin yhteydessä</label><p class="sub" style="margin:0">Arviosi on nimetön: jakaja näkee arviot vain koosteena. Palaute koskee menetelmää, ei ihmistä.</p><div class="row"><button class="btn btn-primary" type="submit">Tallenna arvio</button>' + (s.n === 0 ? '<span class="muted" style="font-size:13px">Olet ensimmäinen kokeilija: +3 lisäpistettä</span>' : "") + "</div></form>";
     const publicPct = st && st.k === "todettu" ? s.pct + " %:lla kokeilijoista toimi hyvin" : "";
@@ -1203,7 +1358,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       '<h2 class="d-title" style="margin-top:8px">' + esc(t.title) + '</h2><p class="d-hyoty">' + esc(t.hyoty) + "</p></div>" +
       '<div class="d-meta">' + statusChip(t) + signal(t) + (spread(t) && (t.mine || st.k !== "kokeile") ? '<span class="muted">Levinnyt ' + spread(t) + " yksikköön</span>" : "") + '<span class="muted">' + esc(publicPct) + "</span></div>" +
       (t.old ? '<div class="dup"><b>Vanhentunut.</b> ' + esc(t.old) + "</div>" : "") +
-      '<div class="box"><dl class="kv"><dt>Tehtävä</dt><dd>' + esc(t.tehtava) + "</dd><dt>Miten</dt><dd>" + esc(t.miten) + "</dd>" +
+      '<div class="box"><dl class="kv"><dt>Alarooli</dt><dd>' + esc(roleNames(t.roles).join(", ") || "–") + "</dd><dt>Tehtävä</dt><dd>" + esc(t.tehtava) + "</dd><dt>Miten</dt><dd>" + esc(t.miten) + "</dd>" +
       (t.tarkistin ? "<dt>Miten tarkistin</dt><dd>" + esc(t.tarkistin) + "</dd>" : "") + (t.huomio ? "<dt>Huomioitavaa</dt><dd>" + esc(t.huomio) + "</dd>" : "") +
       "<dt>Jakaja</dt><dd>" + (t.mine ? "Sinä" : esc(t.author.name) + ", " + esc(t.author.unit)) + " · " + days(t.days) + "</dd>" +
       "<dt>Viimeksi testattu</dt><dd>" + (lastTried(t) == null ? "Ei vielä kokeiltu" : days(lastTried(t))) + "</dd></dl>" +
@@ -1263,6 +1418,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
         '<div class="field"><label class="fl" for="pHyoty">Hyöty <span>(näkyy vinkin etupuolella)</span></label><input class="inp" id="pHyoty" required value="' + esc(draft.hyoty) + '"></div>' +
         '<div class="row"><div class="field" style="flex:1 1 200px"><label class="fl" for="pCat">Luokka</label><select class="inp" id="pCat">' + Object.keys(CATS).map((k) => '<option value="' + k + '"' + (k === draft.cat ? " selected" : "") + ">" + CATS[k].name + "</option>").join("") + '</select></div>' +
         '<div class="field" style="flex:1 1 160px"><label class="fl" for="pTool">Työkalu</label><select class="inp" id="pTool">' + TOOLS.map((x) => "<option" + (x === draft.tool ? " selected" : "") + ">" + x + "</option>").join("") + "</select></div></div>" +
+        '<fieldset aria-describedby="roleErr"><legend>Alarooli <span class="muted" style="font-weight:500">(pakollinen, yksi tai useampi)</span></legend><div class="checks">' + Object.keys(ALAROOLIT).map((k) => '<label class="confirm"><input type="checkbox" name="role" value="' + k + '"' + ((draft.roles || []).includes(k) ? " checked" : "") + "> " + esc(ALAROOLIT[k]) + "</label>").join("") + '</div><p class="err" id="roleErr" role="alert" hidden>Valitse vähintään yksi alarooli.</p></fieldset>' +
         '<div class="field"><label class="fl" for="pTeh">Tehtävä <span>(vapaaehtoinen)</span></label><input class="inp" id="pTeh" value="' + esc(draft.tehtava) + '" placeholder="Mihin työhön vinkki sopii? Esim. pitkät selvitykset"></div>' +
         '<div class="row"><button class="btn btn-primary" type="submit">Laita kiertoon</button><button class="btn btn-ghost" type="button" id="backBtn">Takaisin</button></div></form>';
     }
@@ -1276,10 +1432,12 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   }
 
   /* ---------- actions ---------- */
-  function rate(id, rating, note, named) {
+  function rate(id, rating, note, named, saveKey, syyKey) {
     const t = tip(id); if (!t || S.me.tried[id]) return;
     const first = stats(t).n === 0;
     t.r[rating]++; t.s++; t.last = 0; S.me.tried[id] = rating; S.me.trials++;
+    // Anonymous record for the leadership aggregates (never shown individually, never in the feed).
+    (t.evals = t.evals || []).push({ p: "me", u: "Oma yksikkö", r: rating, save: SAVE[saveKey] ? saveKey : null, syy: SYY_RATINGS.includes(rating) && SYY[syyKey] ? syyKey : null, m: 0 });
     const myNote = note && note.trim() ? { t: note.trim(), d: 0, by: named ? "Sinä" : "", own: true } : null;
     if (myNote) t.notes.unshift(myNote);
     let p = 3, lbl = "Kokeilit vinkkiä ja annoit arvion";
@@ -1307,7 +1465,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function publish(f) {
     const base = draft.improve ? tip(draft.improve) : null;
     const id = "u" + Date.now();
-    const t = { id, mine: true, title: f.title, hyoty: f.hyoty, cat: f.cat, tool: f.tool, tehtava: f.tehtava || "–", miten: draft.miten, prompti: draft.prompti, tarkistin: draft.tarkistin, huomio: "", author: ME, days: 0, r: { hyvin: 0, osittain: 0, ei: 0, tark: 0 }, s: 0, notes: [], parent: base ? base.id : null, change: draft.change, old: "" };
+    const t = { id, mine: true, roles: f.roles, evals: [], title: f.title, hyoty: f.hyoty, cat: f.cat, tool: f.tool, tehtava: f.tehtava || "–", miten: draft.miten, prompti: draft.prompti, tarkistin: draft.tarkistin, huomio: "", author: ME, days: 0, r: { hyvin: 0, osittain: 0, ei: 0, tark: 0 }, s: 0, notes: [], parent: base ? base.id : null, change: draft.change, old: "" };
     S.tips.push(t);
     feedAdd(base ? { type: "improve", who: "me", owner: base.mine ? "me" : base.author.name, title: base.title } : { type: "share", who: "me", title: t.title });
     if (base) {
@@ -1366,7 +1524,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
 
   /* ---------- render & routing ---------- */
   let skin = "neon";
-  try { skin = localStorage.getItem(KEY + "-skin") || "neon"; } catch (e) { /* default */ }
+  try { skin = localStorage.getItem(SKIN_KEY) || "neon"; } catch (e) { /* default */ }
   function applySkin() {
     document.body.classList.toggle("neon", skin === "neon");
     $("#skinBtn").textContent = skin === "neon" ? "Vaihda asialliseen ilmeeseen" : "Vaihda Neon 86 -ilmeeseen";
@@ -1375,14 +1533,14 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   function render() {
     applySkin();
     const v = (location.hash || "#vinkit").slice(1);
-    const view = ["vinkit", "tulostaulu", "kysy", "oma", "miten"].includes(v) ? v : "vinkit";
+    const view = ["vinkit", "tulostaulu", "kysy", "oma", "miten", "johto"].includes(v) ? v : "vinkit";
     document.querySelectorAll("nav.tabs a").forEach((a) => a.setAttribute("aria-current", a.dataset.view === view ? "page" : "false"));
     const lv = level(S.me.alltime);
     $("#mePill").innerHTML = '<span><span class="pts">' + S.me.season + '</span> p<span class="m-hide"> kaudella</span></span><span class="lvl">' + badge(lv.i, 20, true) + '<span class="m-hide">' + esc(lv.l.name) + "</span></span>";
     $("#mePill").setAttribute("aria-label", "Oma Puskaradio: " + S.me.season + " pistettä tällä kaudella, taso " + lv.l.name);
     const m = $("#main");
     const focusQ = document.activeElement && document.activeElement.id === "q"; const caret = focusQ ? document.activeElement.selectionStart : 0;
-    m.innerHTML = view === "kysy" ? viewAsk() : view === "oma" ? viewMe() : view === "miten" ? viewHow() : view === "tulostaulu" ? viewLeaders() : viewBoard();
+    m.innerHTML = view === "kysy" ? viewAsk() : view === "oma" ? viewMe() : view === "miten" ? viewHow() : view === "johto" ? viewLead() : view === "tulostaulu" ? viewLeaders() : viewBoard();
     if (focusQ && $("#q")) { const q = $("#q"); q.focus(); try { q.setSelectionRange(caret, caret); } catch (e) {} }
     if (view === "kysy") { const l = $("#log"); if (l && S.chat.length) l.lastElementChild.scrollIntoView({ block: "nearest" }); }
   }
@@ -1427,7 +1585,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     }
     if (el.id === "tickBtn") { tickerPaused = !tickerPaused; render(); const b = $("#tickBtn"); if (b) b.focus(); return; }
     if (el.id === "shareBtn" || el.id === "heroShare") { openShare(); return; }
-    if (el.id === "skinBtn") { skin = skin === "neon" ? "asiallinen" : "neon"; try { localStorage.setItem(KEY + "-skin", skin); } catch (err) { /* ignore */ } render(); return; }
+    if (el.id === "skinBtn") { skin = skin === "neon" ? "asiallinen" : "neon"; try { localStorage.setItem(SKIN_KEY, skin); } catch (err) { /* ignore */ } render(); return; }
     if (el.id === "resetBtn") { S = seed(); save(); closeModal(); filterCat = "all"; query = ""; render(); toast("Demo palautettu alkutilaan"); return; }
     if (el.id === "simBtn") { simulateWeek(); return; }
     if (el.id === "fillEx") {
@@ -1454,7 +1612,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const f = e.target;
     if (f.id === "rateForm") {
       const r = f.querySelector("input[name=rating]:checked"); if (!r) return;
-      rate(f.dataset.id, r.value, $("#rateNote").value, $("#rateName").checked);
+      rate(f.dataset.id, r.value, $("#rateNote").value, $("#rateName").checked, $("#rateSave").value, $("#syyField").hidden ? "" : $("#rateSyy").value);
     } else if (f.id === "shareForm") {
       draft.miten = $("#sMiten").value.trim(); draft.prompti = $("#sPrompt").value.trim(); draft.tarkistin = $("#sTark").value.trim();
       if ($("#sChange")) draft.change = $("#sChange").value.trim();
@@ -1464,9 +1622,12 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       draft.title = base ? (base.title + (draft.change ? " – " + draft.change : "")).slice(0, 60) : makeTitle(draft.prompti || draft.miten);
       draft.hyoty = base ? base.hyoty : HYOTY[draft.cat];
       draft.tehtava = base ? base.tehtava : "";
+      draft.roles = base ? (base.roles || []).slice() : [];
       draft.step = 2; renderShare();
     } else if (f.id === "publishForm") {
-      publish({ title: $("#pTitle").value.trim(), hyoty: $("#pHyoty").value.trim(), cat: $("#pCat").value, tool: $("#pTool").value, tehtava: $("#pTeh").value.trim() });
+      const roles = [...f.querySelectorAll("input[name=role]:checked")].map((x) => x.value);
+      if (!roles.length) { $("#roleErr").hidden = false; f.querySelector("input[name=role]").focus(); return; }
+      publish({ title: $("#pTitle").value.trim(), hyoty: $("#pHyoty").value.trim(), cat: $("#pCat").value, tool: $("#pTool").value, tehtava: $("#pTeh").value.trim(), roles });
     } else if (f.id === "askForm") {
       const v = $("#askIn").value.trim(); if (!v) return;
       const res = askAgent(v);
@@ -1476,7 +1637,11 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
       save(); render(); const i = $("#askIn"); if (i) i.focus();
     }
   });
-  document.addEventListener("change", (e) => { if (e.target.id === "hideName") { S.me.hideName = e.target.checked; save(); toast(S.me.hideName ? "Nimesi on piilotettu tulostaululta" : "Nimesi näkyy tulostaululla"); } });
+  document.addEventListener("change", (e) => {
+    if (e.target.id === "roleSel") { filterRole = e.target.value; render(); const r = $("#roleSel"); if (r) r.focus(); return; }
+    if (e.target.name === "rating" && $("#syyField")) { const show = SYY_RATINGS.includes(e.target.value); $("#syyField").hidden = !show; if (!show) $("#rateSyy").value = ""; return; }
+    if (e.target.name === "role" && $("#roleErr")) { $("#roleErr").hidden = true; return; }
+    if (e.target.id === "hideName") { S.me.hideName = e.target.checked; save(); toast(S.me.hideName ? "Nimesi on piilotettu tulostaululta" : "Nimesi näkyy tulostaululla"); } });
   document.addEventListener("input", (e) => { if (e.target.id === "q") { query = e.target.value; render(); } });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && $("#ov")) closeModal(); });
 
