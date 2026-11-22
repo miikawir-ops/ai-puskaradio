@@ -146,7 +146,8 @@ async function main() {
           const o = await p.ev("({ sw: document.documentElement.scrollWidth, w: window.innerWidth })");
           const file = await p.shot(path.join(out, `${vp}-${skin}-${view}.png`));
           const errs = p.state.errors.slice(before);
-          const ok = o.sw <= o.w && !errs.length;
+          // On mobile emulation a too-wide page widens the layout viewport itself, so also compare to the set width.
+          const ok = o.sw <= o.w && o.w <= VIEWPORTS[vp].width && !errs.length;
           if (!ok) fails.push(`${vp}/${skin}/${view}`);
           (await p.ev(FONTS_EXPR)).forEach((x) => fonts.add(x));
           console.log(`${ok ? "ok  " : "FAIL"} ${vp.padEnd(7)} ${skin.padEnd(10)} ${view.padEnd(10)} width ${o.sw}/${o.w}${errs.length ? "  errors: " + errs.join("; ") : ""}  ${path.basename(file)}`);
