@@ -1235,7 +1235,19 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
   const tipsOfRole = (k) => latest(S.tips).filter((t) => !t.old && (t.roles || []).includes(k));
   // Section tagline as "data → benefit": data muted, benefit emphasised; the arrow is hidden from screen readers.
   const panelL = (h, data, gain, inner) => '<section class="panel"><h2>' + h + '</h2><p class="sub lead-sub"><span class="data">' + data + '</span><span class="arrow" aria-hidden="true">→</span><span class="sr">: </span><span class="gain">' + gain + "</span></p>" + inner + "</section>";
-  const SPREAD_STOP = 0.75; // a unit's spread "stops" when under 75 % of its tips have been tried in other units
+  // "Leviäminen pysähtyy": the unit has >= minTips tips shared more than minAgeDays ago, and the share of them tried
+  // in other units is under ofOrgAvg x the organisation's share for the same tips. Fewer tips -> "liian vähän dataa".
+  const SPREAD_STOP = { minTips: 3, minAgeDays: 28, ofOrgAvg: 0.5 };
+  // Example aggregate of each unit's older tips beyond the demo board (tips, tried in other units, distinct people involved).
+  const SPREAD_ARCHIVE = { "Yksikkö 1": { tips: 5, spread: 4, people: 14 }, "Yksikkö 2": { tips: 6, spread: 5, people: 16 }, "Yksikkö 3": { tips: 1, spread: 1, people: 4 },
+    "Yksikkö 4": { tips: 4, spread: 3, people: 11 }, "Yksikkö 5": { tips: 5, spread: 4, people: 13 }, "Yksikkö 6": { tips: 7, spread: 1, people: 9 }, "Oma yksikkö": { tips: 3, spread: 2, people: 8 } };
+  // Per unit: older tips (seed tips + archive), how many were tried in other units, and the people behind them.
+  function unitSpread(u) {
+    const own = latest(S.tips).filter((t) => !t.old && t.days > SPREAD_STOP.minAgeDays && (t.mine ? "Oma yksikkö" : t.author.unit) === u);
+    const a = SPREAD_ARCHIVE[u] || { tips: 0, spread: 0, people: 0 };
+    const spreadT = own.filter((t) => (t.evals || []).some((e) => e.u !== u));
+    return { tips: own.length + a.tips, spread: spreadT.length + a.spread, people: people(evalsOf(own).filter((e) => e.u !== u), own) + a.people };
+  }
   const th = (cols) => "<thead><tr>" + cols.map((c, i) => '<th scope="col">' + c + "</th>").join("") + "</tr></thead>";
   const td = (label, html, cls) => '<td data-l="' + label + '"' + (cls ? ' class="' + cls + '"' : "") + ">" + html + "</td>";
   function viewLead() {
@@ -1269,15 +1281,18 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     const hiddenTopics = [...new Set(openQ.map((q) => q.topic))].length - topics.length;
     // 4. Adoption: participation by unit and month + spread of the unit's tips to other units
     const ml = monthLabels();
-    const t4 = '<table class="jt">' + th(["Yksikkö"].concat(ml, ["Vinkkejä kokeiltu muissa yksiköissä"])) + "<tbody>" + UNITS.map((u) => {
-      const own = latest(S.tips).filter((t) => !t.old && (t.mine ? "Oma yksikkö" : t.author.unit) === u);
-      const spreadT = own.filter((t) => (t.evals || []).some((e) => e.u !== u));
-      const cross = evalsOf(own).filter((e) => e.u !== u);
-      return '<tr><th scope="row">' + esc(u === "Oma yksikkö" ? "Oma yksikkösi" : u) + "</th>" + PART_HISTORY[u].map((v, i) => td(ml[i], v + " %", "num")).join("") +
-        (() => { if (!own.length) return td("Kokeiltu muissa yksiköissä", "–", "num"); if (people(cross, own) < MIN_GROUP) return td("Kokeiltu muissa yksiköissä", HID, "num");
-          const stop = spreadT.length / own.length < SPREAD_STOP;
-          return td("Kokeiltu muissa yksiköissä", spreadT.length + " / " + own.length + " vinkistä" + (stop ? " – leviäminen pysähtyy" : ""), stop ? "num gap" : "num"); })() + "</tr>";
+    const us = Object.fromEntries(UNITS.map((u) => [u, unitSpread(u)]));
+    const orgTips = UNITS.reduce((a, u) => a + us[u].tips, 0), orgAvg = orgTips ? UNITS.reduce((a, u) => a + us[u].spread, 0) / orgTips : 0;
+    const L = "Kokeiltu muissa yksiköissä";
+    const t4 = '<table class="jt">' + th(["Yksikkö"].concat(ml, ["Yli 4 vk vanhoja vinkkejä kokeiltu muissa yksiköissä"])) + "<tbody>" + UNITS.map((u) => {
+      const x = us[u];
+      let cell;
+      if (x.tips < SPREAD_STOP.minTips) cell = td(L, '<span class="hid">liian vähän dataa</span>', "num");
+      else if (x.people < MIN_GROUP) cell = td(L, HID, "num");
+      else { const stop = x.spread / x.tips < SPREAD_STOP.ofOrgAvg * orgAvg; cell = td(L, x.spread + " / " + x.tips + (stop ? " – leviäminen pysähtyy" : ""), stop ? "num gap" : "num"); }
+      return '<tr><th scope="row">' + esc(u === "Oma yksikkö" ? "Oma yksikkösi" : u) + "</th>" + PART_HISTORY[u].map((v, i) => td(ml[i], v + " %", "num")).join("") + cell + "</tr>";
     }).join("") + "</tbody></table>";
+    const spreadLegend = "Osallistumisaste kuukausittain ja yli 4 viikkoa sitten jaettujen vinkkien leviäminen muihin yksiköihin (organisaation keskiarvo " + Math.round(orgAvg * 100) + " %). Korostettu: yksiköllä on vähintään 3 tällaista vinkkiä, ja niistä muissa yksiköissä kokeiltujen osuus on alle puolet keskiarvosta.";
     // 5. Risks: share of trials whose tip has "Miten tarkistin?" filled, by alarooli
     const t5 = '<table class="jt">' + th(["Alarooli", "Kokeiluista tarkistustapa kuvattu"]) + "<tbody>" + roles.map((k) => {
       const tips = tipsOfRole(k), ev = evalsOf(tips), withT = tips.filter((t) => t.tarkistin).flatMap((t) => t.evals || []);
@@ -1293,7 +1308,7 @@ body.neon .demo-strip, body.neon main { position: relative; z-index: 1; }
     return '<div class="view-head"><div><span class="eyebrow">Johdon näkymä<span class="ex-badge">Esimerkkidataa</span></span><h1>Tekoälyn johtaminen verotuksen asiantuntijatyössä</h1></div></div>' +
       '<p class="notice" role="note">Data syntyy käytön sivutuotteena. Vain koottua tietoa – alle 5 hengen ryhmät piilotetaan.</p>' +
       '<div class="lead-grid">' +
-      panelL("1. Miten osaaminen leviää", "Kokeilut yksiköittäin", "missä leviäminen pysähtyy", t4 + '<p class="lead-legend">Osallistumisaste kuukausittain ja yksikön vinkkien leviäminen muihin yksiköihin. Korostettu: alle 75 % yksikön vinkeistä on kokeiltu muissa yksiköissä.</p>') +
+      panelL("1. Miten osaaminen leviää", "Kokeilut yksiköittäin", "missä leviäminen pysähtyy", t4 + '<p class="lead-legend">' + spreadLegend + "</p>") +
       panelL("2. Missä tekoäly auttaa", "Statukset alarooleittain", "kohdenna lisenssit ja koulutus", t1 + '<p class="lead-legend">Vinkkien määrä statuksittain. Korostettu: toimivaksi todettua tapaa ei vielä ole.</p>') +
       panelL("3. Hyöty näkyviin", "Aikasäästöarviot", "perustelu lisensseille", '<div class="big-est">noin ' + magnitude(hours(month)) + " kuukaudessa</div>" + t6 + '<p class="lead-legend">Perustuu käyttäjien omiin arvioihin (vaihteluvälin keskiarvo per kerta), esitetty suuruusluokkana.</p>') +
       panelL("4. Mikä ei toimi", "Arvioiden syyt", "mitä korjata ensin", '<ul class="notes">' + dist + "</ul>" + '<h3 class="eyebrow" style="margin:16px 0 6px">Alarooleittain</h3>' + t2 + '<p class="lead-legend">Syyt arvioista “toimi osittain” ja “ei toiminut”.</p>') +
