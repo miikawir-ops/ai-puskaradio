@@ -31,9 +31,18 @@ Nämä säännöt täydentävät globaaleja sääntöjä (`~/.claude/CLAUDE.md`)
 ## Periaatteet (eivät jousta)
 - **Jakaminen on aina turvallista.**
 - **Arviot ovat nimettömiä** ja näkyvät jakajalle **vain koosteena**.
-- **Heikko vinkki ei saa negatiivista merkintää**: se pitää neutraalin statuksen ja jää vain järjestyksessä taka-alalle. Vanhentunut-status tulee vain työkalun muuttumisesta, ei koskaan heikoista arvioista.
+- **Heikko vinkki ei saa negatiivista merkintää**: se pitää neutraalin statuksen ja jää vain järjestyksessä taka-alalle. Vanhentunut-status tulee työkalun muuttumisesta, yli 6 kuukauden tauosta kokeiluissa tai useamman käyttäjän ilmoituksesta, ei koskaan heikoista arvioista.
 - **Pisteitä ei voi menettää.**
 - **Yksilöiden pisteet näkyvät vain itselle** (Oma Puskaradio). Julkisilla listoilla näkyy vain kärki ja oma sijoitus; kukaan ei jää julkisesti häntäpäähän, ja nimen voi piilottaa.
+
+## Kannustimet, feed ja nimettömyys
+- **Puskaradio-feed kertoo vain myönteisiä tapahtumia** (jako, kokeilu, parannus, tasonnousu, status, kisan kärki). **Kokeilun tulosta ei kerrota koskaan** (ei "toimi" / "ei toiminut"); tulokset näkyvät vain koosteina (status, taso, kausimerkki).
+- Nimensä piilottaneet näkyvät feedissä **nimettöminä** ("Nimetön kollega"). Käyttäjän omat toiminnot lisätään feediin heti.
+- Feedissä ja muualla **ei pelien tai elokuvien tunnistettavia fraaseja**. Neon-ilmeessä feed on radiojuontajan sävyinen, asiallisessa ilmeessä hillitty.
+- **Hyödyllinen kommentti:** vain jakaja voi merkitä oman vinkkinsä kommentin hyödylliseksi; kommentoija saa +2 kerran per kommentti. Nimettömän kommentoijan henkilöllisyys ei paljastu jakajalle.
+- **Kiitos kokeilijoille:** ei pisteitä, menee kaikille kokeilijoille paljastamatta heitä jakajalle.
+- **Ensimmäinen vinkki:** kertaluonteinen merkki ja +5, ei koskaan toista kertaa.
+- **Jatkuva kunnia:** parannetun version kokeilusta ketjun alkuperäinen tekijä saa +1.
 
 ## Tasonimet
 Rookie → Tekijä → Velho → Mestari → Final boss
